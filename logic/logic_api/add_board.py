@@ -23,6 +23,7 @@ class Board:
         self.name = name
         query = 'mutation { create_board (board_name: "' + self.name + \
                 '", board_kind: private, workspace_id: ' + str(self.work_space.work_space_id) + ') { id } }'
+        print(query)
         self.board_id = self.work_space.post_request(query)['create_board']['id']
 
 
