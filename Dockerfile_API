@@ -1,0 +1,18 @@
+# Use a specific version of the python image
+FROM python:3.12
+
+# Set the working directory inside the container
+WORKDIR /usr/src/tests
+
+# Copy everything from the current directory into the container
+COPY . .
+
+# Upgrade pip
+RUN pip install --no-cache-dir --upgrade pip
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run the shell script that runs both Python scripts when the container starts
+# Run both Python scripts when the container starts
+CMD ["python","-m", "unittest", "Tests/test_api/test_runner.py"]
