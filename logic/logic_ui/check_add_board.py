@@ -19,4 +19,4 @@ class CheckAddBoard(BasePage):
 
     def _add_board(self, _name="My_terrific_board"):
         self.navigate_to("https://mkhayyo7.monday.com/workspaces/1482559")
-        self.check_add_board(_name="My_terrific_board")
+        return self.check_add_board(_name="My_terrific_board")

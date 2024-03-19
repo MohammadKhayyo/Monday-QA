@@ -25,8 +25,3 @@ class Board:
                 '", board_kind: private, workspace_id: ' + str(self.work_space.work_space_id) + ') { id } }'
         print(query)
         self.board_id = self.work_space.post_request(query)['create_board']['id']
-
-
-# api_key = "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjMzMzM1NjEzOSwiYWFpIjoxMSwidWlkIjo1NjkyNDM3MiwiaWFkIjoiMjAyNC0wMy0xNVQwNzo0MjowMS42NTZaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjE3NDM4ODMsInJnbiI6ImV1YzEifQ.sQXv-gJ59t13myfuIIrC7B3TLrcpcwV3O7lR2J0N-Dw"
-# work_space = WorkSpace(name="MY_TEAM", token=api_key)
-# my_board = Board(ws=work_space, name="My_terrific_board")
