@@ -72,5 +72,5 @@ jobs:
 
       - name: Run Selenium tests
         run: |
-          python -m unittest Tests/test_selenium/test_runner.py
+          python -m unittest test_runner_ui_api.py
 
