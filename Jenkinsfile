@@ -14,14 +14,14 @@ pipeline {
             }
         }
 
-//         stage('Parallel Steps') {
-//             parallel {
-//                 stage('Running API Tests') {
-//                     steps {
-//                         echo 'Testing...'
+        stage('Parallel Steps') {
+            parallel {
+                stage('Running API Tests') {
+                    steps {
+                        echo 'Testing...'
 //                         bat "${PYTHON_PATH} -m unittest Tests/test_api/test_runner.py"
-//                     }
-//                 }
+                    }
+                }
 
                 stage('Setup Selenium Server HUB') {
                     steps {
