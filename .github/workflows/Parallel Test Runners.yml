@@ -43,7 +43,7 @@ jobs:
 
       - name: Run API tests
         run: |
-          python -m unittest Tests/test_api/test_runner.py
+          python -m unittest test_runner_api.py
 
   selenium_test:
     name: Selenium Test Runner
