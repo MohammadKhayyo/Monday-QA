@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>monday.com: Where Teams Get Work Done</title>
+  <meta charset="utf-8">
+  <meta name="description" content="monday.com is a work OS that powers teams to run processes, projects and workflows in one digital workspace">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=2.0">
+  <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="DJkiEvlH1znlJK4LjzxO0t58IfWpoLoMeetDPX54Kbg=" />
+  <link rel="apple-touch-icon" sizes="120x120" href="https://cdn.monday.com/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="https://cdn.monday.com/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://cdn.monday.com/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.monday.com/apple-touch-icon-180x180.png">
+
+<link rel="icon" type="image/png" href="https://cdn.monday.com/favicon-monday-v4.png">
+
+<meta name="theme-color" content="#ffffff">
+
+  <meta property="og:image" content="https://s3.amazonaws.com/general-assets/monday-200x200.png">
+  <meta property="og:url" content="https://mkhayyo7.monday.com/auth/login_monday/email_password"/>
+  <meta property="og:title" content="Welcome to monday.com | a new way of working" />
+  <meta property="og:description" content="monday.com Work OS is an open platform where anyone can create the tools they need to run every aspect of their work.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Kufi+Arabic:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&family=Noto+Sans+Hebrew:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+  
+<style type="text/css">
+  @font-face {
+    font-family: 'FontAwesome';
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
+<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css" />
+
+  <script src="https://cdn.monday.com/assets/lib/jquery-1.11.2-39cc7e053fb2635f0759e107fe933746213d55b818b20d9b6b6a772bdcc87ea2.js"></script>
+
+  <script>
+  window.bigbrainInitOptions = {
+    pulse_user_id: "",
+    pulse_account_id: "21743883",
+    started_plan_at: "",
+    account_created_at: "2024-03-11 10:14:37 UTC",
+    plan_id: "",
+    pulse_user_serial_number: "",
+    is_mobile_app: false,
+    send_immediately: true,
+    sync_interval: 2000,
+    source: "web_app",
+    cookies_enabled: true,
+    slug: "mkhayyo7"
+  };
+</script>
+<script>
+  window.bigbrainScriptUrl = "https://informer-cdn.monday.com/monday-informer-1.0.min.js?v=1";
+  window.bigbrainInitOptions = window.bigbrainInitOptions || {};
+  window.bigbrainTrackUrl = "https://track.bigbrain.me/prod";
+</script>
+<script>
+  window.webpack_init_time = window.webpack_init_time || (new Date().getTime())
+  window.bundles_urls = window.bundles_urls || {};
+  window.bundles_urls["bigbrain_tracker"] = "https://cdn.monday.com/build/bigbrain_tracker-2da0283fe12c62a68481.js";
+</script>
+    <script crossorigin src="https://cdn.monday.com/build/bigbrain_tracker-2da0283fe12c62a68481.js" type="text/javascript"  ></script>
+
+
+
+
+        <link rel="stylesheet" media="all" href="https://cdn.monday.com/build/login_monday-c04937cf15144b6db83e.css" crossorigin="anonymous" />
+
+  <script src="https://cdn.monday.com/get_translations.js?locale=en&project=platform&timestamp=1711268186" type="text/javascript"></script>
+</head>
+<body id="login-monday-body" class="login-monday-body">
+  <script>
+  window.webpack_init_time = window.webpack_init_time || (new Date().getTime())
+  window.bundles_urls = window.bundles_urls || {};
+  window.bundles_urls["externals"] = "https://cdn.monday.com/build/externals-f511b5c8.js";
+</script>
+    <script crossorigin src="https://cdn.monday.com/build/externals-f511b5c8.js" type="text/javascript"  ></script>
+
+      <script>window.webpackPublicPath = "https://cdn.monday.com/build/";</script>
+
+  <script>
+window.VulcanInitData = {
+  isEmbeddedView: false,
+  shouldLoadCurrentUser: false,
+  features:{
+    newSnapshot: false,
+  },
+
+};
+</script>
+<script>
+  window.webpack_init_time = window.webpack_init_time || (new Date().getTime())
+  window.bundles_urls = window.bundles_urls || {};
+  window.bundles_urls["babel_polyfill_and_helpers"] = "https://cdn.monday.com/build/babel_polyfill_and_helpers-bed9d639ec83af3e0f04.js";
+</script>
+    <script crossorigin src="https://cdn.monday.com/build/babel_polyfill_and_helpers-bed9d639ec83af3e0f04.js" type="text/javascript"  ></script>
+
+
+
+  
+<div id="login-monday-container" class="login-monday-container">
+    
+<style>.monday-lite-loader { display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; }</style>
+<div id="monday-lite-loader" class="monday-lite-loader"><img src="https://cdn.monday.com/images/loader/loader.gif" alt="Loading..." /></div>
+
+
+</div>
+
+<script type="text/javascript">
+  window.Pulse = window.Pulse || {};
+  window.Pulse.image_path      = function(path) { return base_path("images", path) };
+  window.Pulse.font_path       = function(path) { return base_path("fonts", path) };
+  window.Pulse.lib_path        = function(path) { return base_path("lib", path) };
+  window.Pulse.icon_path       = function(path) { return base_path("icons", path) };
+  window.Pulse.forms_icon_path = function(path) { return base_path("forms_icons", path) };
+  window.Pulse.external_assets_path = function(path) {return base_path("external_assets", path) };
+  
+  var base_path = function(root_dir, path) {
+    return ("https://cdn.monday.com/" + root_dir + "/" + path.replace(/^\//,''));
+  };
+</script>
+
+<script type="text/javascript">
+  window.Pulse = window.Pulse || {}
+  window.Pulse.domain = 'monday.com'
+  window.Pulse.isBrowserSupported = true
+  window.Pulse.isDesktopApp = false
+  window.Pulse.appName = "monday app"
+  window.Pulse.ssoConnectData = {"notice_id":"invalid_sso_connect_token"}
+  window.Pulse.brandName = "monday.com"
+  window.Pulse.currentAccount = {"sso":{"isEnabled":false,"providerKey":"built_in","restrictions":null,"providerDisplayName":null},"has2FAEnabled":false,"id":21743883,"name":"mkhayyo7","slug":"mkhayyo7","authDomain":null}
+  window.Pulse.currentUser = {"email":""}
+  window.Pulse.recaptchaSiteKey = "6Leb9d0aAAAAAHJoQhpXiopyYuaSdXArxRToyn0p"
+  window.Pulse.shouldShowRecaptcha = false
+  window.Pulse.formAuthenticityToken = "DJkiEvlH1znlJK4LjzxO0t58IfWpoLoMeetDPX54Kbg="
+  window.Pulse.shouldShowOauth2Option = true
+  window.Pulse.with_login_ms = true
+  window.Pulse.allowOpeningIframeLinksSameTab = false
+  window.Pulse.shouldDisableLoginWithBrowser = false
+  window.Pulse.shouldEnableGoogleSSOWithBrowser = false
+  window.Pulse.shouldDisableLoginToAnotherAccountProductKind = false
+  window.Pulse.product_kind = ""
+  window.Pulse.ab_tests = []
+  window.Pulse.utm_locale_id = ""
+  window.Pulse.page_referer = ""
+</script>
+    <script>
+  window.webpack_init_time = window.webpack_init_time || (new Date().getTime())
+  window.bundles_urls = window.bundles_urls || {};
+  window.bundles_urls["login_monday"] = "https://cdn.monday.com/build/login_monday-4872aeca1649f5af6ce6.js";
+</script>
+    <script crossorigin src="https://cdn.monday.com/build/login_monday-4872aeca1649f5af6ce6.js" type="text/javascript"  ></script>
+
+
+<script>(function(){if (!document.body) return;var js = "window['__CF$cv$params']={r:'86995e2aef990fd2',t:'MTcxMTMxMTY4OS44MTMwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();</script></body>
+</html>

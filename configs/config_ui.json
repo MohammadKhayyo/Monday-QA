@@ -1,7 +1,7 @@
 {
   "hub": "http://localhost:4444",
   "url": "https://mkhayyo7.monday.com",
-  "grid": true,
+  "grid": false,
   "parallel": true,
   "serial": false,
   "demo": false,

@@ -1,70 +1,68 @@
-import cfbd
-from Utils.configurations import ConfigurationManager
 import json
-from typing import List, Any, Callable
+from time import sleep
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()  # "../../configs/.env"
 
 
-class APIWrapper:
-    """
-    APIWrapper serves as a utility class to interact with the college football data API.
-    It simplifies fetching data and handling API responses.
-    """
+class MondayApi:
+    def __init__(self, print_api_protocol=True):
+        api_key = os.getenv("API_MONDAY")
+        self.token = api_key
+        self.print_api_protocol = print_api_protocol
+        self.apiUrl = "https://api.monday.com/v2"
+        self.headers = {"Authorization": self.token}
 
-    def __init__(self):
-        """
-        Initializes the APIWrapper with API keys loaded from the configuration.
-        """
-        configuration = cfbd.Configuration()
-        config_manager = ConfigurationManager()
-        config_data = config_manager.load_settings("config_api.json")
-        for key in config_data:
-            configuration.api_key[key] = config_data[key]
-        self.client = cfbd.ApiClient(configuration)
+    def send_request(self, query):
+        data = {'query': query}
+        if self.print_api_protocol:
+            print("sending:", query)
+        response_str = requests.post(url=self.apiUrl, json=data, headers=self.headers).text
+        response = json.loads(response_str)
+        return response
 
-    @staticmethod
-    def check_response_content(response_json, **kwargs):
-        """
-        Validates that all items in a JSON response match the specified key-value pairs.
-
-        :param response_json: A JSON object or list of objects to check.
-        :param kwargs: Key-value pairs to check against the JSON objects.
-        :return: True if all items match, False otherwise.
-        """
-        if isinstance(response_json, str):
-            try:
-                response_json = json.loads(response_json)
-            except json.JSONDecodeError:
-                print("Failed to parse JSON.")
-                return False
-        elif not isinstance(response_json, list):
-            print("Response is neither a JSON string nor a list.")
-            return False
-        for game in response_json:
-            match = True
-            for key, value in kwargs.items():
-                if not hasattr(game, key) or getattr(game, key) != value:
-                    match = False
-                    break
-            if match:
-                return True
-
-        return False
-
-    def fetch_data(self, fetch_function: Callable, **kwargs) -> List[Any]:
-        """
-        Fetches data from the college football data API using the specified callable.
-
-        :param fetch_function: The callable that makes the API call.
-        :param kwargs: Keyword arguments to pass to the callable.
-        :return: A list of data items fetched from the API.
-        """
+    def post_request(self, query):
+        while True:
+            response = self.send_request(query)
+            if self.handle_response_errors(response=response):
+                break
         try:
-            data = fetch_function(**kwargs)
-            print(f"Retrieved {len(data)} items.")
-            return data
-        except cfbd.ApiException as api_error:
-            print(f"API exception occurred: {api_error}")
-            raise
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-            raise
+            if self.print_api_protocol:
+                print("received:", response)
+                print()
+            return response['data']
+        except:
+            if self.print_api_protocol:
+                print("untracked error in post request:")
+                print("query:", query)
+                print("error: ", response)
+                print()
+            return response
+
+    def handle_response_errors(self, response):
+        #  "status_code" in response and response["status_code"] == 429 and
+        if 'errors' in response:
+            errors = response['errors']
+            for error in errors:
+                if 'message' in error:
+                    error_message = error['message']
+                else:
+                    error_message = error
+                if 'Complexity budget exhausted' in error_message:
+                    seconds_to_rest = 5
+                    if 'reset in ' in error_message:
+                        seconds_to_rest = error_message.split('reset in ')[1][:2]
+                        seconds_to_rest = seconds_to_rest.strip()
+                        if seconds_to_rest.isdigit():
+                            seconds_to_rest = int(seconds_to_rest) + 1
+                        else:
+                            seconds_to_rest = 5
+                    sleep(seconds_to_rest)
+                    return False
+                else:
+                    with open("../../errors.txt", "a") as file1:
+                        file1.write(error_message)
+            return False
+        return True
