@@ -11,7 +11,7 @@ class SerialEpicsTests(unittest.TestCase):
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
-        default_browser = 'firefox'  # Specify your default browser here
+        default_browser = 'chrome'
         self.browser = getattr(self.__class__, 'browser', default_browser)
         self.driver = self.browser_wrapper.initialize_web_driver(browser_name=self.browser)
         self.login_page = LoginPage(self.driver)
@@ -21,14 +21,11 @@ class SerialEpicsTests(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
-    def test_bulk_epic_removal_by_name(self):
-        operationStatus = self.epics_Page.bulkDeleteEpics("New epic", "all")
-        self.assertTrue(operationStatus, "Bulk deletion of epics by name failed")
-
     def test_revert_bulk_epic_deletion(self):
         operationStatus = self.epics_Page.revertBulkDeletion()
         self.assertTrue(operationStatus, "Reverting bulk deletion of epics failed")
 
     def tearDown(self):
+        self.home_page.sign_out()
         if self.driver:
             self.driver.quit()

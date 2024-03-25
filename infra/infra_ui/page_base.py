@@ -1,3 +1,4 @@
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -41,6 +42,22 @@ class BasePage():
     SEARCH_MY_TEAM = (By.XPATH, '//*[@id="boards-list-search-input"]')
     tmp = (By.XPATH, '//*[@id="first-level-content"]/div/div[1]/div[2]/div[2]/div[1]/div[2]/div[2]/div/button')
     BOARD_NAME = (By.XPATH, "//*[starts-with(@id, 'board_item_')]/div[2]/div/div[1]/div/span")
+    Attached_Files_field = (By.XPATH,
+                            "//*[starts-with(@id, 'row-pulse---') and contains(@id, '-notplaceholder-focus-attached_files-')]/div/div/div")
+
+    text_in_Attached_Files_field = (
+        By.XPATH, "//*[starts-with(@id, 'pdf_asset_id_') and contains(@id, '_page_2')]/div[2]/div[1]/span")
+
+    group = (By.XPATH,
+             "//*[starts-with(@id, 'row-header-currentBoard-') and contains(@id, 'notfloating-focus-group_title-')]/span[2]/div/div/h4")
+
+    link_column = (By.XPATH,
+                   "//*[starts-with(@id, 'row-header-currentBoard-') and contains(@id, 'notfloating-focus-link-')]/span/div/div/h6")
+
+    link_field = (By.XPATH,
+                  "//*[starts-with(@id, 'row-pulse---') and contains(@id, 'notplaceholder-focus-link-')]/div/div/div/a")
+    add_item_in_my_board = (By.XPATH, '//*[@id="board-header-view-bar"]/div/div[2]/div/div[1]/button')
+    The_Big_X = (By.XPATH, '//*[@id="board-wrapper-first-level-content"]/div[4]/div/div/div/div[11]')
 
     def __init__(self, driver):
         self._driver = driver
@@ -53,6 +70,9 @@ class BasePage():
 
     def wait_for_element(self, locator):
         return WebDriverWait(self._driver, 30).until(EC.presence_of_element_located(locator))
+
+    def wait_for_visibility_of_element_located(self, locator):
+        return WebDriverWait(self._driver, 30).until(EC.visibility_of_element_located(locator))
 
     def enter_text(self, locator, text):
         field = self.wait_for_element(locator)
@@ -68,10 +88,10 @@ class BasePage():
     def wait_for_text(self, url):
         WebDriverWait(self._driver, 30).until(lambda driver: url in driver.current_url)
 
-    def clickable_element(self, locator):
+    def clickable_element(self, locator, time_out=30):
         """Wait for an element to be clickable and then click."""
         self.wait_for_element(locator)
-        element = WebDriverWait(self._driver, 30).until(EC.element_to_be_clickable(locator))
+        element = WebDriverWait(self._driver, time_out).until(EC.element_to_be_clickable(locator))
         return element
 
     def switch_and_click(self, ELEMENT, tab):
@@ -84,6 +104,15 @@ class BasePage():
         except:
             self.clickable_element(ELEMENT)
             self.click_when_clickable(ELEMENT)
+            self.clickable_element(tab)
+            self.click_when_clickable(tab)
+
+    def switch_to_tab(self, tab):
+        try:
+            self.clickable_element(self.SEARCH_MY_TEAM)
+            self.clickable_element(tab)
+            self.click_when_clickable(tab)
+        except:
             self.clickable_element(tab)
             self.click_when_clickable(tab)
 
@@ -133,8 +162,9 @@ class BasePage():
                     break
         return list_EM, count
 
-    def search(self, ELEMENT, name, Task=False):
-        self.switch_and_click(ELEMENT, self.TAB_MAIN_TABLE)
+    def search(self, ELEMENT=None, name="", Task=False):
+        if ELEMENT is None:
+            self.switch_and_click(ELEMENT, self.TAB_MAIN_TABLE)
         # if Task:
         #     self.clickable_element(self.Main_table_Tasks)
         #     self.click_when_clickable(self.Main_table_Tasks)
@@ -226,9 +256,10 @@ class BasePage():
         self.click_when_clickable(self.HEADER_BOARD)
         # WebDriverWait(self._driver, 30).until(EC.presence_of_all_elements_located(NAME_NEW))
         try:
+            self.wait_for_visibility_of_element_located(NAME_NEW)
             names = self._driver.find_elements(*NAME_NEW)
         except:
-            WebDriverWait(self._driver, 30).until(EC.presence_of_all_elements_located(NAME_NEW))
+            self.wait_for_element(NAME_NEW)
             names = self._driver.find_elements(*NAME_NEW)
         if names is None or len(names) == 0:
             return list()
@@ -267,7 +298,7 @@ class BasePage():
         if not list_all_element or len(list_all_element) == 0:
             return True
         self.click_when_clickable(self.UNDO)
-        self.clickable_element(NAME_NEW)
+        self.clickable_element(NAME_NEW, time_out=5)
         names = self._driver.find_elements(*NAME_NEW)
         if len(list_all_element) != len(names):
             return False
@@ -281,11 +312,80 @@ class BasePage():
                 return False
         return True
 
-    def check_add_board(self, _name="My_terrific_board"):
+    def click_undo_delete_button(self):
+        self.click_when_clickable(self.UNDO)
+
+    def get_all_elements_in_task_in_search(self):
+        try:
+            self.clickable_element(self.switcher_button)
+            self.clickable_element(self.add_item_in_my_board)
+            self.clickable_element(self.X_SEARCH)
+            self.clickable_element(self.add_item_in_my_board)
+            self.wait_for_visibility_of_element_located(self.TXT_ITEM_NAME_FILTER)
+            names = self._driver.find_elements(*self.TXT_ITEM_NAME_FILTER)
+            list_all_elements = list()
+            for name in names:
+                list_all_elements.append(name.text)
+            return list_all_elements
+        except:
+            return list()
+
+    def check_add_board(self, _name="MY_BOARD"):
         self.clickable_element(self.switcher_button)
-        self.clickable_element(self.tmp)
+        # self.clickable_element(self.tmp)
         names = self._driver.find_elements(*self.BOARD_NAME)
         for name in names:
             if name.text == _name:
                 return True
         return False
+
+    def switch_board(self, _name="MY_BOARD"):
+        self.clickable_element(self.switcher_button)
+        # self.clickable_element(self.tmp)
+        names = self._driver.find_elements(*self.BOARD_NAME)
+        for name in names:
+            if name.text == _name:
+                # self.switch_to_tab(tab=self.TAB_MAIN_TABLE)
+                name.click()
+                # self.switch_to_tab(tab=self.TAB_MAIN_TABLE)
+                return True
+        return False
+
+    def click_Attached_Files(self, name_item="new_item_1"):
+        self.search(self, name=name_item)
+        self.clickable_element(self.add_item_in_my_board)
+        names = self._driver.find_elements(*self.Attached_Files_field)
+        for name in names:
+            name.click()
+        text_element = self.wait_for_visibility_of_element_located(self.text_in_Attached_Files_field)
+        text = text_element.text
+        return text
+
+    def get_all_group(self):
+        self.clickable_element(self.add_item_in_my_board)
+        self.switch_to_tab(tab=self.TAB_MAIN_TABLE)
+        self.clickable_element(self.add_item_in_my_board)
+        groups = self._driver.find_elements(*self.group)
+        groups_list_names = list()
+        for group in groups:
+            if group.text:
+                groups_list_names.append(group.text)
+        return groups_list_names
+
+    def get_all_links(self):
+        self.clickable_element(self.add_item_in_my_board)
+        self.switch_to_tab(tab=self.TAB_MAIN_TABLE)
+        self.clickable_element(self.add_item_in_my_board)
+        links = self._driver.find_elements(*self.link_field)
+        links_list_names = list()
+        for link in links:
+            links_list_names.append({'text': link.text, 'href': link.get_attribute('href')})
+        return links_list_names
+
+    def click_on_the_big_X(self):
+        self.wait_for_visibility_of_element_located(self.The_Big_X)
+        self.click_when_clickable(self.The_Big_X)
+
+    def clear_search_the_small_x(self):
+        self.wait_for_visibility_of_element_located(self.X_SEARCH)
+        self.click_when_clickable(self.X_SEARCH)

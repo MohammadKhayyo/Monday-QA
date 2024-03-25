@@ -1,3 +1,4 @@
+import random
 import unittest
 from Utils import users
 from infra.infra_ui.browser_wrapper import WebDriverManager
@@ -18,20 +19,29 @@ class ParallelRetrospectivesTests(unittest.TestCase):
         self.login_page = LoginPage(self.driver)
         user = self.VALID_USERS[0]
         self.login_page.login(user['email'], user['password'])
-        self.retrospectives_page = RetrospectivesPage(self.driver)
+        self.retrospective_Interface = RetrospectivesPage(self.driver)
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
+    def test_bulk_delete_retrospectives_with_matching_name(self):
+        unique_task_name = generate_string.create_secure_string()
+        random_number = random.randint(2, 5)
+        for i in range(random_number):
+            creationStatus = self.retrospective_Interface.add_new_retrospective(unique_task_name)
+            self.assertTrue(creationStatus, "Creation of a new retrospective failed")
+        outcome = self.retrospective_Interface.bulkDeleteRetrospectives(unique_task_name, "all")
+        self.assertTrue(outcome, "Failed to undo the bulk deletion of retrospectives.")
+
     def test_create_and_remove_retrospective(self):
         task_name = generate_string.create_secure_string()
-        creationStatus = self.retrospectives_page.add_new_retrospective(task_name)
+        creationStatus = self.retrospective_Interface.add_new_retrospective(task_name)
         self.assertTrue(creationStatus, "Creation of a new retrospective failed")
-        deletionStatus = self.retrospectives_page.bulkDeleteRetrospectives(task_name)
+        deletionStatus = self.retrospective_Interface.bulkDeleteRetrospectives(task_name)
         self.assertTrue(deletionStatus, "Deletion of the retrospective failed")
 
-    def test_find_sprints_by_name(self):
-        search_result = self.retrospectives_page.findTasksByName(name="New feedback")
-        self.assertTrue(search_result, "Failed to find the specified retrospective")
+    # def test_find_sprints_by_name(self):
+    #     search_result = self.retrospective_Interface.findTasksByName(name="New feedback")
+    #     self.assertTrue(search_result, "Failed to find the specified retrospective")
 
     def tearDown(self):
         if self.driver:

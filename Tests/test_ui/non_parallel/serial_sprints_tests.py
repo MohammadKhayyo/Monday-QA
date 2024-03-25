@@ -21,14 +21,11 @@ class SerialSprintsTests(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
-    def test_purge_sprints_with_identical_names(self):
-        operationOutcome = self.sprint_Interface.removeSprint("New sprint", "all")
-        self.assertTrue(operationOutcome, "Delete all sprints that have the name did not succeed")
-
     def test_revert_sprint_deletions(self):
         operationOutcome = self.sprint_Interface.revertAllSprintDeletions()
         self.assertTrue(operationOutcome, "Failed to undo the deletion of all sprints.")
 
     def tearDown(self):
+        self.home_page.sign_out()
         if self.driver:
             self.driver.quit()

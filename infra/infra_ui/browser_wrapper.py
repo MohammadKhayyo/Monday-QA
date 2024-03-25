@@ -18,9 +18,9 @@ class WebDriverManager:
             options = webdriver.EdgeOptions()
         else:
             raise ValueError(f"Unsupported browser type: {browser_type}")
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--headless")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
         return options
 
     def initialize_web_driver(self, browser_name):

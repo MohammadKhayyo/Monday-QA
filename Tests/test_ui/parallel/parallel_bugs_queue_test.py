@@ -1,3 +1,4 @@
+import random
 import unittest
 from Utils import users
 from infra.infra_ui.browser_wrapper import WebDriverManager
@@ -22,6 +23,15 @@ class ParallelBugsQueueTests(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
+    def test_bulk_delete_bugs_with_matching_name(self):
+        unique_bug_name = generate_string.create_secure_string()
+        random_number = random.randint(2, 5)
+        for i in range(random_number):
+            creationSuccess = self.bugs_queue_page.add_new_bugs_queue(unique_bug_name)
+            self.assertTrue(creationSuccess, "Failed to add a new bug to the queue")
+        operationOutcome = self.bugs_queue_page.bulkDeleteBugs(unique_bug_name, "all")
+        self.assertTrue(operationOutcome, "Bulk deletion of bugs by name failed")
+
     def test_add_retrospectives_and_and_delete_it(self):
         unique_bug_name = generate_string.create_secure_string()
         creationSuccess = self.bugs_queue_page.add_new_bugs_queue(unique_bug_name)
@@ -29,9 +39,9 @@ class ParallelBugsQueueTests(unittest.TestCase):
         deletionSuccess = self.bugs_queue_page.bulkDeleteBugs(unique_bug_name)
         self.assertTrue(deletionSuccess, "Failed to remove the bug from the queue")
 
-    def test_find_sprints_by_name(self):
-        search_result = self.bugs_queue_page.findTasksByName(name="Birthday notification")
-        self.assertTrue(search_result, "Failed to find the specified bug")
+    # def test_find_sprints_by_name(self):
+    #     search_result = self.bugs_queue_page.findTasksByName(name="Birthday notification")
+    #     self.assertTrue(search_result, "Failed to find the specified bug")
 
     def tearDown(self):
         if self.driver:

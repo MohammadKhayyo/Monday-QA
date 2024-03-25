@@ -11,7 +11,7 @@ class SerialRetrospectivesTests(unittest.TestCase):
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
-        default_browser = 'firefox'
+        default_browser = 'chrome'
         self.browser = getattr(self.__class__, 'browser', default_browser)
         self.driver = self.browser_wrapper.initialize_web_driver(browser_name=self.browser)
         self.login_page = LoginPage(self.driver)
@@ -21,14 +21,11 @@ class SerialRetrospectivesTests(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
-    def test_bulk_delete_retrospectives_with_matching_name(self):
-        outcome = self.retrospective_Interface.bulkDeleteRetrospectives("New feedback", "all")
-        self.assertTrue(outcome, "Failed to undo the bulk deletion of retrospectives.")
-
     def test_revert_bulk_deletion_of_retrospectives(self):
         outcome = self.retrospective_Interface.revertBulkDeletion()
         self.assertTrue(outcome, "Failed to undo the bulk deletion of retrospectives.")
 
     def tearDown(self):
+        self.home_page.sign_out()
         if self.driver:
             self.driver.quit()
