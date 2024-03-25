@@ -12,12 +12,13 @@ import sys
 # Now try importing ConfigurationManager
 
 from Utils.configurations import ConfigurationManager
-from Tests.test_api.games_api_test import TestGameAPI
-from Tests.test_api.teams_api_test import TestTeamsApi
-from Tests.test_api.venues_api_test import TestVenuesApi
-from Tests.test_api.ranking_api_test import RankingsApi
+from Tests.test_api.work_space_test import WorkSpaceTest
+from Tests.test_api.board_test import BoardTest
+from Tests.test_api.group_test import GroupTest
+from Tests.test_api.column_test import ColumnTest
+from Tests.test_api.item_test import ItemTest
 
-all_test_groups = [TestGameAPI, TestTeamsApi, TestVenuesApi, RankingsApi]
+all_test_groups = [WorkSpaceTest, BoardTest, GroupTest, ColumnTest, ItemTest]
 
 
 def execute_test_with_browser(browser_name: str, test_group: Type[unittest.TestCase]):

@@ -1,6 +1,6 @@
 # Environment variables
 .env
-configs/.env
+.env
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -77,7 +77,7 @@ docs/_build/
 **/*.pyo
 **/*.pyd
 .DS_Store
-configs/.env
+.env
 .venv
 venv
 .git

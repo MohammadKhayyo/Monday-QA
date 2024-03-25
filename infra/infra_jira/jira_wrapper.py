@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from Utils.configurations import ConfigurationManager
 
 # Load environment variables
-load_dotenv("..\\..\\configs\\.env")
+load_dotenv("../../.env")
 
 
 class JiraWrapper:
