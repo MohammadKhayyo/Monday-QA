@@ -1,12 +1,14 @@
 from selenium.webdriver.common.by import By
 from infra.infra_ui.page_base import BasePage
 from selenium.webdriver.support.ui import WebDriverWait
+
 switcher_button = (By.XPATH, '//*[@id="product-switcher-button-id"]')
+
 
 class HomePage(BasePage):
     switcher_button = (By.XPATH, '//*[@id="product-switcher-button-id"]')
-    DIV_BUTTON = (By.XPATH, '//*[@id="main"]/span/div/div/div/div[1]/div[2]/div[3]/div/clickable/div[1]')
-    SALES_CRM = (By.XPATH, '//*[@id="main"]/span/div/div/div/div[1]/div[2]/div[2]/div/clickable/div[1]')
+    DIV_BUTTON = (By.XPATH, '//*[@id="main"]/span/div/div/div/div[1]/div[2]/div[1]/div/clickable/div[2]')
+    SALES_CRM = (By.XPATH, '//*[@id="main"]/span/div/div/div/div[1]/div[2]/div[2]/div/clickable/div[2]')
     environment_name = (By.XPATH, '//*[@id="mf-topbar"]/div/div/div[1]/div[2]/h1/span[2]')
     DROP_DOWN_LIST = (By.XPATH, '//*[@id="surface-avatar-menu-component"]/div/div/div/img')
     SIGN_OUT = (

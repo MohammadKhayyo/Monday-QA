@@ -8,28 +8,28 @@ from concurrent.futures import ThreadPoolExecutor
 # except:
 #     pass
 from Utils.configurations import ConfigurationManager
-# from Tests.test_ui.parallel.parallel_tasks_tests import ParallelTasksTests
-# from Tests.test_ui.parallel.parallel_sprints_tests import ParallelSprintsTests
-# from Tests.test_ui.parallel.parallel_epics_tests import ParallelEpicsTests
-# from Tests.test_ui.parallel.parallel_login_tests import ParallelLoginTests
+from Tests.test_ui.parallel.parallel_tasks_tests import ParallelTasksTests
+from Tests.test_ui.parallel.parallel_sprints_tests import ParallelSprintsTests
+from Tests.test_ui.parallel.parallel_epics_tests import ParallelEpicsTests
+from Tests.test_ui.parallel.parallel_login_tests import ParallelLoginTests
 # from Tests.test_ui.parallel.parallel_home_tests import ParallelHomeTests
-# from Tests.test_ui.parallel.parallel_bugs_queue_test import ParallelBugsQueueTests
-# from Tests.test_ui.parallel.parallel_retrospectives_page_test import ParallelRetrospectivesTests
-#
-# from Tests.test_ui.non_parallel.serial_tasks_tests import SerialTasksTests
-# from Tests.test_ui.non_parallel.serial_sprints_tests import SerialSprintsTests
-# from Tests.test_ui.non_parallel.serial_epics_tests import SerialEpicsTests
-# from Tests.test_ui.non_parallel.serial_login_tests import SerialLoginTests
+from Tests.test_ui.parallel.parallel_bugs_queue_test import ParallelBugsQueueTests
+from Tests.test_ui.parallel.parallel_retrospectives_page_test import ParallelRetrospectivesTests
+
+from Tests.test_ui.non_parallel.serial_tasks_tests import SerialTasksTests
+from Tests.test_ui.non_parallel.serial_sprints_tests import SerialSprintsTests
+from Tests.test_ui.non_parallel.serial_epics_tests import SerialEpicsTests
+from Tests.test_ui.non_parallel.serial_login_tests import SerialLoginTests
 from Tests.test_ui.non_parallel.serial_home_tests import SerialHomeTests
-# from Tests.test_ui.non_parallel.serial_bugs_queue_tests import BugsQueuePage
-# from Tests.test_ui.non_parallel.serial_retrospectives_tests import RetrospectivesPage
+from Tests.test_ui.non_parallel.serial_bugs_queue_tests import BugsQueuePage
+from Tests.test_ui.non_parallel.serial_retrospectives_tests import RetrospectivesPage
 
 # Grouping test cases
-# serial_test_groups = [SerialTasksTests, SerialSprintsTests, SerialEpicsTests, SerialLoginTests, SerialHomeTests,
-#                       BugsQueuePage, RetrospectivesPage]
-# parallel_test_groups = [ParallelTasksTests, ParallelSprintsTests, ParallelEpicsTests, ParallelLoginTests,
-#                         ParallelHomeTests, ParallelBugsQueueTests, ParallelRetrospectivesTests]
-# all_test_groups = serial_test_groups + parallel_test_groups
+serial_test_groups = [SerialTasksTests, SerialSprintsTests, SerialEpicsTests, SerialLoginTests, SerialHomeTests,
+                      BugsQueuePage, RetrospectivesPage]
+parallel_test_groups = [ParallelTasksTests, ParallelSprintsTests, ParallelEpicsTests, ParallelLoginTests,
+                        ParallelBugsQueueTests, ParallelRetrospectivesTests]
+all_test_groups = serial_test_groups + parallel_test_groups
 
 demo_test = [SerialHomeTests]
 
@@ -60,9 +60,9 @@ if __name__ == "__main__":
     is_serial = not settings['parallel']
     browsers = settings["browser_types"]
     grid_url = settings["hub"]
-    # if is_parallel:
-    #     run_tests_for_browser_parallel(browsers, parallel_test_groups)
-    #     run_tests_for_browser_serial(browsers, serial_test_groups)
-    # elif is_serial:
-    #     run_tests_for_browser_serial(browsers, all_test_groups)
-    run_tests_for_browser_serial(browsers, demo_test)
+    if is_parallel:
+        run_tests_for_browser_parallel(browsers, parallel_test_groups)
+        run_tests_for_browser_serial(browsers, serial_test_groups)
+    elif is_serial:
+        run_tests_for_browser_serial(browsers, all_test_groups)
+    # run_tests_for_browser_serial(browsers, demo_test)

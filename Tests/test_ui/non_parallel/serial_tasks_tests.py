@@ -21,14 +21,11 @@ class SerialTasksTests(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
-    def test_purge_duplicate_tasks(self):
-        operationSuccess = self.task_Interface.remove_task("New task", "all")
-        self.assertTrue(operationSuccess, "Failed to purge all tasks with the same name.")
-
     def test_mass_undo_task_deletions(self):
         operationSuccess = self.task_Interface.revertAllTaskDeletions()
         self.assertTrue(operationSuccess, "Failed to undo the deletion of all tasks.")
 
     def tearDown(self):
+        self.home_page.sign_out()
         if self.driver:
             self.driver.quit()

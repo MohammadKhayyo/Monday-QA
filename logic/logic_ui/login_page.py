@@ -1,9 +1,10 @@
 from infra.infra_ui.page_base import BasePage
 from selenium.webdriver.common.by import By
+from Utils.configurations import ConfigurationManager
 
 
 class LoginPage(BasePage):
-    URL_BOARD = "https://mkhayyo7.monday.com"
+    # URL_BOARD = "https://mkhayyo7.monday.com"
     LOGIN = (By.XPATH, '//*[@id="login-monday-container"]/div/div[2]/div/div[1]/div/div[4]/div/button')
     EMAIL = (By.XPATH, '//*[@id="user_email"]')
     PASSWORD = (By.XPATH, '//*[@id="user_password"]')
@@ -12,6 +13,9 @@ class LoginPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
+        config_manager = ConfigurationManager()
+        self.settings = config_manager.load_settings()
+        self.URL_BOARD = self.settings["url"]
 
     def login(self, email, password):
         """Login method to enter credentials and navigate to the board."""

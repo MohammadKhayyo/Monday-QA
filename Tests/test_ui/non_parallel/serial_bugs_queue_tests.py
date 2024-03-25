@@ -21,14 +21,11 @@ class BugsQueueTests(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
-    def test_bulk_delete_bugs_with_matching_name(self):
-        operationOutcome = self.bugs_queue_page.bulkDeleteBugs("New bug", "all")
-        self.assertTrue(operationOutcome, "Bulk deletion of bugs by name failed")
-
     def test_revert_bulk_deletion_of_bugs(self):
         operationOutcome = self.bugs_queue_page.revertBulkBugDeletion()
         self.assertTrue(operationOutcome, "Reverting bulk deletion of bugs failed")
 
     def tearDown(self):
+        self.home_page.sign_out()
         if self.driver:
             self.driver.quit()

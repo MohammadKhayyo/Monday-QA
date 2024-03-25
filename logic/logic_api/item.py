@@ -109,8 +109,6 @@ class Item:
         self.send_request.post_request(query=query)
 
     def get_item_via_key(self, id, key, value):
-        '{ boards(ids: 1437020021) { groups(ids: "my_group") { items_page { items { id name column_values { id text value } } } } } }'
-
         items_details = self.send_request.post_request(
             query='{ boards(ids: ' + self.group.board.board_id + ') { groups(ids: ' + '"' + str(
                 self.group.group_id) + '"' + ') { items_page { items { id name column_values { column { id type title description } id text } } } } } }')[
