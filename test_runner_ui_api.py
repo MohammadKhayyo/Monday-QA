@@ -1,28 +1,44 @@
+import os
 import subprocess
 from Utils.configurations import ConfigurationManager
 
 
 def run_pytest(parallel=False):
-    # Directory where all tests are located
-    ui_tests_path = "Tests/test_ui_api"
+    # Load configuration
 
-    # Basic command with the path to UI tests
-    cmd = ["pytest", ui_tests_path, "--html=report.html"]
+    ui_tests_path = "tests/api"
+    reports_dir = "reports"
+    os.makedirs(reports_dir, exist_ok=True)
 
-    # If parallel execution is enabled, modify the command to run with xdist
+    python_path = os.path.join("venv", "Scripts", "python.exe")
+
+    # Base command using the virtual environment's Python
+    base_cmd = [python_path, "-m", "pytest", ui_tests_path]
+
+    html_report = os.path.join(reports_dir, "report.html")
+
     if parallel:
-        # Runs all tests except those marked as 'serial'
-        cmd.extend(["-n", "8", "-m", "not serial"])
-        subprocess.run(cmd)
+        parallel_cmd = base_cmd + ["-n", "3", "-m", "not serial", f"--html={html_report}"]
+        try:
+            subprocess.run(parallel_cmd, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Tests failed with return code {e.returncode}. Continuing the build...")
 
-        # Now run the serial tests without xdist
-        cmd = ["pytest", ui_tests_path, "-m", "serial", "--html=report_serial.html"]
+    try:
+        serial_html_report = os.path.join(reports_dir, "report_serial.html")
+        serial_cmd = base_cmd + ["-m", "serial", f"--html={serial_html_report}"]
+        subprocess.run(serial_cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 5:  # No tests were collected
+            print("No serial tests were found.")
+        else:
+            print(e.returncode)
     else:
-        # Optionally, use a different report name for serial tests
-        cmd.extend(["--html=report_serial.html"])
-
-    # Execute the pytest command
-    subprocess.run(cmd)
+        non_parallel_cmd = base_cmd + [f"--html={html_report}"]
+        try:
+            subprocess.run(non_parallel_cmd, check=True)
+        except subprocess.CalledProcessError as e:
+            print(e.returncode)
 
 
 if __name__ == "__main__":
