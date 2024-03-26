@@ -11,7 +11,7 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat 'C:\\ProgramData\\Anaconda3\\python.exe -m venv venv'
+                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
             post {
