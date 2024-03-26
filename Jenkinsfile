@@ -9,7 +9,7 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
+                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m venv venv'
                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
             post {
@@ -51,10 +51,10 @@ pipeline {
                 }
             }
         }
-        stage('Running Tests') {
+        stage(' Running Tests') {
             steps {
                 echo 'Testing..'
-                bat "venv\\Scripts\\python.exe test_runner_ui_api.py"
+                bat "venv\\Scripts\\python.exe parallel_test_runner_sample.py"
             }
             post {
                 success {
@@ -68,7 +68,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                // Deployment steps go here
+                // Your deployment steps here
             }
             post {
                 success {
@@ -79,38 +79,17 @@ pipeline {
                 }
             }
         }
-        stage('Publish Report') {
-            steps {
-                script {
-                    bat 'echo Current Working Directory: %CD%'
-                    bat 'dir reports\\*'
-                    if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
-                        echo 'Reports directory exists and is not empty. Proceeding with compression using 7-Zip...'
-
-                        // Specify the path to the 7-Zip executable
-                        def pathTo7Zip = '"C:\\Program Files\\7-Zip\\7z.exe"'
-                        // Compress the reports directory into report.zip using 7-Zip
-                        def compressCmd = "${pathTo7Zip} a -tzip report.zip reports\\* -mx=9"
-                        def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
-                        echo "Compression Output: ${compressOutput}"
-
-                        // Verify report.zip was created
-                        if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
-                            echo 'report.zip exists. Proceeding to archive...'
-                            archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
-                        } else {
-                            error 'report.zip does not exist after compression attempt with 7-Zip.'
-                        }
-                    } else {
-                        error 'Reports directory is empty or does not exist. Skipping compression...'
-                    }
-                }
-            }
-        }
+         stage('Publish Report') {
+             steps {
+                bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
+                archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+    }
+}
     }
     post {
         always {
             echo 'Cleaning up...'
+            // General cleanup notification
             slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {

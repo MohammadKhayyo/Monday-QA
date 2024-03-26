@@ -17,10 +17,10 @@ settings = config_manager.load_settings()
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
-@pytest.mark.serial
-@parameterized_class(('browser',), [
-    ('chrome',),
-])
+# @pytest.mark.serial
+# @parameterized_class(('browser',), [
+#     ('chrome',),
+# ])
 class EndToEnd(unittest.TestCase):
     VALID_USERS = users.authentic_users
 
