@@ -82,17 +82,19 @@ pipeline {
         stage('Publish Report') {
             steps {
                 script {
+                    // Ensure we are in the right directory
+                    bat 'cd'
                     // Check if the reports directory contains files
                     if (bat(script: 'if exist reports\\* (echo Found & exit 0) else (echo Not found & exit 1)', returnStatus: true) == 0) {
                         echo 'Reports directory exists and is not empty. Proceeding with compression...'
-                        // Attempt to compress the reports directory into report.zip
-                        def compressResult = bat(script: 'powershell Compress-Archive -Path reports\\* -DestinationPath report.zip -Force', returnStatus: true)
-                        if (compressResult == 0) {
-                            echo 'Compression command executed successfully.'
-                            bat 'if exist report.zip (echo report.zip exists) else (echo report.zip does not exist)'
+                        // Capture and log the output of Compress-Archive
+                        bat(script: 'powershell -Command "Compress-Archive -Path reports\\* -DestinationPath report.zip -Force"', returnStdout: true).trim()
+                        // Check if report.zip was created
+                        if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
+                            echo 'report.zip exists. Proceeding to archive...'
                             archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
                         } else {
-                            echo 'Compression command failed with exit code: ${compressResult}'
+                            error 'report.zip does not exist after compression attempt.'
                         }
                     } else {
                         error 'Reports directory is empty or does not exist. Skipping compression...'
