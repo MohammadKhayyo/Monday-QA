@@ -4,7 +4,7 @@ from Utils.configurations import ConfigurationManager
 
 def run_pytest(parallel=False):
     # Directory where all tests are located
-    ui_tests_path = "Tests/test_ui"
+    ui_tests_path = "Tests/test_ui_api"
 
     # Basic command with the path to UI tests
     cmd = ["pytest", ui_tests_path, "--html=report.html"]
