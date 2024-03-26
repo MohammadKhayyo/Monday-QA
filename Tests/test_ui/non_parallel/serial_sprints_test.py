@@ -2,11 +2,22 @@ import unittest
 from Utils import users
 from infra.infra_ui.browser_wrapper import WebDriverManager
 from logic.logic_ui.login_page import LoginPage
-from logic.logic_ui.Epics_page import EpicsPage
+from logic.logic_ui.Sprints_page import SprintsPage
 from logic.logic_ui.Home_page import HomePage
+import pytest
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
+
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
-class SerialEpicsTests(unittest.TestCase):
+@pytest.mark.serial
+@parameterized_class(('browser',), [
+    ('chrome',),
+])
+class SerialSprintsTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 
     def setUp(self):
@@ -17,13 +28,13 @@ class SerialEpicsTests(unittest.TestCase):
         self.login_page = LoginPage(self.driver)
         user = self.VALID_USERS[0]
         self.login_page.login(user['email'], user['password'])
-        self.epics_Page = EpicsPage(self.driver)
+        self.sprint_Interface = SprintsPage(self.driver)
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
 
-    def test_revert_bulk_epic_deletion(self):
-        operationStatus = self.epics_Page.revertBulkDeletion()
-        self.assertTrue(operationStatus, "Reverting bulk deletion of epics failed")
+    def test_revert_sprint_deletions(self):
+        operationOutcome = self.sprint_Interface.revertAllSprintDeletions()
+        self.assertTrue(operationOutcome, "Failed to undo the deletion of all sprints.")
 
     def tearDown(self):
         self.home_page.sign_out()

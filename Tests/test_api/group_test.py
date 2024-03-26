@@ -3,16 +3,17 @@ from infra.infra_api.api_wrapper import MondayApi
 from logic.logic_api.work_space import WorkSpace
 from logic.logic_api.board import Board
 from logic.logic_api.group import Group
+from Utils import generate_string
 
 
 class GroupTest(unittest.TestCase):
     def setUp(self):
         self.send_request = MondayApi()
         self.work_space_name = "MY_TEAM"
-        self.board_name = "MY_BOARD"
+        self.board_name = generate_string.create_secure_string()
         self.folder_id = "888640"
         self.folder_name = "My Team"
-        self.group_name = "MY_GROUP"
+        self.group_name = generate_string.create_secure_string()
         self.work_space = WorkSpace(work_space_name=self.work_space_name)
         self.board = Board(work_space=self.work_space, board_name=self.board_name, folder_name=self.folder_name,
                            exists=False)
@@ -33,7 +34,7 @@ class GroupTest(unittest.TestCase):
         self.assertEqual(group_details['title'], self.group.group_name)
 
     def test_create_and_delete_group(self):
-        title = "my_test_group"
+        title = generate_string.create_secure_string()
         group = Group(board=self.board, group_name=title, exist=False)
         # group_details = self.group.check_group_via_key(key='title', value=title)
         # self.assertEqual(group_details['id'], group.group_id)

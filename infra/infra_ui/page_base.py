@@ -58,12 +58,14 @@ class BasePage():
                   "//*[starts-with(@id, 'row-pulse---') and contains(@id, 'notplaceholder-focus-link-')]/div/div/div/a")
     add_item_in_my_board = (By.XPATH, '//*[@id="board-header-view-bar"]/div/div[2]/div/div[1]/button')
     The_Big_X = (By.XPATH, '//*[@id="board-wrapper-first-level-content"]/div[4]/div/div/div/div[11]')
+    number_of_item_selected = (By.XPATH, '//*[@id="board-wrapper-first-level-content"]/div[4]/div/div/div/div[2]/div')
 
     def __init__(self, driver):
         self._driver = driver
 
     def click_when_clickable(self, locator):
-        WebDriverWait(self._driver, 30).until(EC.presence_of_element_located(locator))
+        self.wait_for_element(locator)
+        self.wait_for_visibility_of_element_located(locator)
         element = WebDriverWait(self._driver, 30).until(EC.element_to_be_clickable(locator))
         element.click()
         return element
@@ -71,8 +73,8 @@ class BasePage():
     def wait_for_element(self, locator):
         return WebDriverWait(self._driver, 30).until(EC.presence_of_element_located(locator))
 
-    def wait_for_visibility_of_element_located(self, locator):
-        return WebDriverWait(self._driver, 30).until(EC.visibility_of_element_located(locator))
+    def wait_for_visibility_of_element_located(self, locator, time_out=30):
+        return WebDriverWait(self._driver, time_out).until(EC.visibility_of_element_located(locator))
 
     def enter_text(self, locator, text):
         field = self.wait_for_element(locator)
@@ -91,19 +93,26 @@ class BasePage():
     def clickable_element(self, locator, time_out=30):
         """Wait for an element to be clickable and then click."""
         self.wait_for_element(locator)
+        self.wait_for_visibility_of_element_located(locator)
         element = WebDriverWait(self._driver, time_out).until(EC.element_to_be_clickable(locator))
         return element
 
     def switch_and_click(self, ELEMENT, tab):
         try:
+            self.wait_for_visibility_of_element_located(self.SEARCH_MY_TEAM)
+            self.wait_for_element(self.SEARCH_MY_TEAM)
             self.clickable_element(self.SEARCH_MY_TEAM)
             self.clickable_element(ELEMENT)
             self.click_when_clickable(ELEMENT)
             self.clickable_element(tab)
             self.click_when_clickable(tab)
         except:
+            self.wait_for_visibility_of_element_located(ELEMENT)
+            self.wait_for_element(ELEMENT)
             self.clickable_element(ELEMENT)
             self.click_when_clickable(ELEMENT)
+            self.wait_for_element(tab)
+            self.wait_for_visibility_of_element_located(tab)
             self.clickable_element(tab)
             self.click_when_clickable(tab)
 
@@ -124,14 +133,20 @@ class BasePage():
         # self.switch_and_click(ELEMENT, self.Main_table_Tasks)
         self.click_when_clickable(NEW_ELEMENT)
         try:
+            self.wait_for_element(TEXT_NEW)
+            self.wait_for_visibility_of_element_located(TEXT_NEW)
             name_field = self.clickable_element(TEXT_NEW)
         except:
+            self.wait_for_element(NAME_NEW)
+            self.wait_for_visibility_of_element_located(NAME_NEW)
             names = self._driver.find_elements(*NAME_NEW)
             for element in names:
                 if element.text.lower() == name_new.lower():
                     element.click()
                     break
             try:
+                self.wait_for_element(TEXT_NEW)
+                self.wait_for_visibility_of_element_located(TEXT_NEW)
                 name_field = self.clickable_element(TEXT_NEW)
             except:
                 return False
@@ -231,8 +246,12 @@ class BasePage():
                 return False
             if count == 0:
                 return True
+            self.wait_for_element(self.BTN_DELETE)
+            self.wait_for_visibility_of_element_located(self.BTN_DELETE)
             self.clickable_element(self.BTN_DELETE)
             self.click_when_clickable(self.BTN_DELETE)
+            self.wait_for_element(self.BTN_CONFIRM_DELETE)
+            self.wait_for_visibility_of_element_located(self.BTN_CONFIRM_DELETE)
             self.clickable_element(self.BTN_CONFIRM_DELETE)
             self.click_when_clickable(self.BTN_CONFIRM_DELETE)
 
@@ -298,8 +317,13 @@ class BasePage():
         if not list_all_element or len(list_all_element) == 0:
             return True
         self.click_when_clickable(self.UNDO)
-        self.clickable_element(NAME_NEW, time_out=5)
+        self.clickable_element(NAME_NEW, time_out=10)
         names = self._driver.find_elements(*NAME_NEW)
+        # number_selected = self.wait_for_visibility_of_element_located(self.number_of_item_selected).text
+        # if number_selected.isnumeric():
+        #     number_selected = int(number_selected)
+        #     if 0 < len(list_all_element) <= number_selected and number_selected > 0:
+        #         return True
         if len(list_all_element) != len(names):
             return False
         sorted_names = list()
@@ -321,7 +345,7 @@ class BasePage():
             self.clickable_element(self.add_item_in_my_board)
             self.clickable_element(self.X_SEARCH)
             self.clickable_element(self.add_item_in_my_board)
-            self.wait_for_visibility_of_element_located(self.TXT_ITEM_NAME_FILTER)
+            self.wait_for_visibility_of_element_located(self.TXT_ITEM_NAME_FILTER, time_out=5)
             names = self._driver.find_elements(*self.TXT_ITEM_NAME_FILTER)
             list_all_elements = list()
             for name in names:

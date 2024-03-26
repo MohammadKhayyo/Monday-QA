@@ -29,13 +29,16 @@ class HomePage(BasePage):
             environment_span = None
             while count <= 10:
                 environment_span = self.wait_for_element(self.environment_name)
+                self.wait_for_visibility_of_element_located(self.environment_name)
                 try:
                     WebDriverWait(self._driver, 3).until(lambda driver: environment_name == environment_span.text)
                     break
                 except:
                     environment_span = self.wait_for_element(self.environment_name)
+                    self.wait_for_visibility_of_element_located(self.environment_name)
                     count += 1
             environment_span = self.wait_for_element(self.environment_name)
+            self.wait_for_visibility_of_element_located(self.environment_name)
             name = environment_span.text
             return name
         except Exception as E:

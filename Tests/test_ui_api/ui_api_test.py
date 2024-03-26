@@ -9,8 +9,16 @@ from infra.infra_api.api_wrapper import MondayApi
 from logic.logic_api.column import Column
 from logic.logic_api.item import Item
 from logic.logic_api.group import Group
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
+from Utils import generate_string
+
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
+@parameterized_class(('browser',), browser_types)
 class AddBoardTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 
@@ -26,9 +34,9 @@ class AddBoardTests(unittest.TestCase):
         self.home_page.changeEnvironment(environment_name="dev")
         self.send_request = MondayApi()
         self.work_space_name = "MY_TEAM"
-        self.board_name = "MY_BOARD"
+        self.board_name = generate_string.create_secure_string()
         self.folder_name = "My Team"
-        self.group_name = "MY_GROUP"
+        self.group_name = generate_string.create_secure_string()
         self.work_space = WorkSpace(work_space_name=self.work_space_name)
         self.board = Board(work_space=self.work_space, board_name=self.board_name, folder_name=self.folder_name,
                            exists=False)
@@ -44,7 +52,8 @@ class AddBoardTests(unittest.TestCase):
                        "files_paths": [file_path]}
         Column(board=self.board, title=data_column['title'], description=data_column['description'],
                column_type=data_column['column_type'])
-        item = Item(group=self.group, item_name="new_item_1", exist=False)
+        item_name = generate_string.create_secure_string()
+        item = Item(group=self.group, item_name=item_name, exist=False)
         item.upload_files(column_title=data_column['title'], files_paths=data_column["files_paths"])
         self.home_page.switch_board(_name=self.board_name)
         text = self.home_page.click_Attached_Files(name_item=item.item_name)
@@ -68,7 +77,8 @@ class AddBoardTests(unittest.TestCase):
                        "link": "www.google.com", "placeholder": "search with google"}
         Column(board=self.board, title=data_column['title'], description=data_column['description'],
                column_type=data_column['column_type'])
-        item = Item(group=self.group, item_name="new_item_1", exist=False)
+        item_name = generate_string.create_secure_string()
+        item = Item(group=self.group, item_name=item_name, exist=False)
         item.add_link(column_title=data_column['title'], link=data_column['link'],
                       description=data_column['placeholder'])
         self.home_page.switch_board(_name=self.board_name)

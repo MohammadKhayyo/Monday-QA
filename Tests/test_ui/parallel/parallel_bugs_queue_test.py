@@ -7,7 +7,19 @@ from logic.logic_ui.Bugs_Queue_page import BugsQueuePage
 from logic.logic_ui.Home_page import HomePage
 from Utils import generate_string
 
+import pytest
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
 
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [(browser,) for browser in settings["browser_types"]]
+
+
+@pytest.mark.serial
+@parameterized_class(('browser',), [
+    ('chrome',),
+])
 class ParallelBugsQueueTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 

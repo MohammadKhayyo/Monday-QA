@@ -4,8 +4,19 @@ from infra.infra_ui.browser_wrapper import WebDriverManager
 from logic.logic_ui.login_page import LoginPage
 from logic.logic_ui.Retrospectives_page import RetrospectivesPage
 from logic.logic_ui.Home_page import HomePage
+import pytest
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
+
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
+@pytest.mark.serial
+@parameterized_class(('browser',), [
+    ('chrome',),
+])
 class SerialRetrospectivesTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 

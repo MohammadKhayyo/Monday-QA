@@ -8,21 +8,21 @@ from concurrent.futures import ThreadPoolExecutor
 # except:
 #     pass
 from Utils.configurations import ConfigurationManager
-from Tests.test_ui.parallel.parallel_tasks_tests import ParallelTasksTests
-from Tests.test_ui.parallel.parallel_sprints_tests import ParallelSprintsTests
-from Tests.test_ui.parallel.parallel_epics_tests import ParallelEpicsTests
-from Tests.test_ui.parallel.parallel_login_tests import ParallelLoginTests
+from Tests.test_ui.parallel.parallel_tasks_test import ParallelTasksTests
+from Tests.test_ui.parallel.parallel_sprints_test import ParallelSprintsTests
+from Tests.test_ui.parallel.parallel_epics_test import ParallelEpicsTests
+from Tests.test_ui.parallel.parallel_login_test import ParallelLoginTests
 # from Tests.test_ui.parallel.parallel_home_tests import ParallelHomeTests
 from Tests.test_ui.parallel.parallel_bugs_queue_test import ParallelBugsQueueTests
 from Tests.test_ui.parallel.parallel_retrospectives_page_test import ParallelRetrospectivesTests
 
-from Tests.test_ui.non_parallel.serial_tasks_tests import SerialTasksTests
-from Tests.test_ui.non_parallel.serial_sprints_tests import SerialSprintsTests
-from Tests.test_ui.non_parallel.serial_epics_tests import SerialEpicsTests
-from Tests.test_ui.non_parallel.serial_login_tests import SerialLoginTests
-from Tests.test_ui.non_parallel.serial_home_tests import SerialHomeTests
-from Tests.test_ui.non_parallel.serial_bugs_queue_tests import BugsQueuePage
-from Tests.test_ui.non_parallel.serial_retrospectives_tests import RetrospectivesPage
+from Tests.test_ui.non_parallel.serial_tasks_test import SerialTasksTests
+from Tests.test_ui.non_parallel.serial_sprints_test import SerialSprintsTests
+from Tests.test_ui.non_parallel.serial_epics_test import SerialEpicsTests
+from Tests.test_ui.non_parallel.serial_login_test import SerialLoginTests
+from Tests.test_ui.non_parallel.serial_home_test import SerialHomeTests
+from Tests.test_ui.non_parallel.serial_bugs_queue_test import BugsQueuePage
+from Tests.test_ui.non_parallel.serial_retrospectives_test import RetrospectivesPage
 
 # Grouping test cases
 serial_test_groups = [SerialTasksTests, SerialSprintsTests, SerialEpicsTests, SerialLoginTests, SerialHomeTests,

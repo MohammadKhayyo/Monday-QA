@@ -3,7 +3,15 @@ from Utils import users
 from infra.infra_ui.browser_wrapper import WebDriverManager
 from logic.logic_ui.login_page import LoginPage
 
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
 
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [(browser,) for browser in settings["browser_types"]]
+
+
+@parameterized_class(('browser',), browser_types)
 class ParallelLoginTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 

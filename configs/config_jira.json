@@ -1,4 +1,4 @@
 {
-  "server": "https://mkhayyo7.atlassian.net/",
-  "user": "mkhayyo7@gmail.com"
+  "jira_server": "https://mkhayyo7.atlassian.net",
+  "jira-user": "mkhayyo7@gmail.com"
 }

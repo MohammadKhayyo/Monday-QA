@@ -6,8 +6,15 @@ from logic.logic_ui.login_page import LoginPage
 from logic.logic_ui.Tasks_page import TasksPage
 from logic.logic_ui.Home_page import HomePage
 from Utils import generate_string
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
+
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
+@parameterized_class(('browser',), browser_types)
 class ParallelTasksTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 

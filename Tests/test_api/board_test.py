@@ -3,13 +3,15 @@ from infra.infra_api.api_wrapper import MondayApi
 from logic.logic_api.work_space import WorkSpace
 from logic.logic_api.board import Board
 from logic.logic_api.group import Group
+from Utils import generate_string
 
 
 class BoardTest(unittest.TestCase):
     def setUp(self):
         self.send_request = MondayApi()
         self.work_space_name = "MY_TEAM"
-        self.board_name = "MY_BOARD"
+        unique_name = generate_string.create_secure_string()
+        self.board_name = unique_name
         self.folder_id = "888640"
         self.folder_name = "My Team"
         self.work_space = WorkSpace(work_space_name=self.work_space_name)

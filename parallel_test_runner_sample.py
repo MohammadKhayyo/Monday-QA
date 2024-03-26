@@ -2,14 +2,21 @@ import os
 import subprocess
 from Utils.configurations import ConfigurationManager
 
+import os
+import subprocess
+from Utils.configurations import ConfigurationManager
+
 
 def run_pytest(parallel=False):
+    # Load configuration
+    config_manager = ConfigurationManager()
+    settings = config_manager.load_settings()
 
-    ui_tests_path = "Tests/test_ui/End_to_End"
+    ui_tests_path = "tests/api"
     reports_dir = "reports"
     os.makedirs(reports_dir, exist_ok=True)
 
-    python_path = os.path.join(".venv", "Scripts", "python.exe")
+    python_path = os.path.join("venv", "Scripts", "python.exe")
 
     # Base command using the virtual environment's Python
     base_cmd = [python_path, "-m", "pytest", ui_tests_path]
@@ -17,11 +24,11 @@ def run_pytest(parallel=False):
     html_report = os.path.join(reports_dir, "report.html")
 
     if parallel:
-        parallel_cmd = base_cmd + ["-n", "8", "-m", "not serial", f"--html={html_report}"]
+        parallel_cmd = base_cmd + ["-n", "3", "-m", "not serial", f"--html={html_report}"]
         try:
             subprocess.run(parallel_cmd, check=True)
         except subprocess.CalledProcessError as e:
-            print(f"Tests failed with return code {e.returncode}. Continuing the build...")
+            print(e.returncode)
 
     try:
         serial_html_report = os.path.join(reports_dir, "report_serial.html")
@@ -38,6 +45,7 @@ def run_pytest(parallel=False):
             subprocess.run(non_parallel_cmd, check=True)
         except subprocess.CalledProcessError as e:
             print(e.returncode)
+
 
 if __name__ == "__main__":
     config_manager = ConfigurationManager()

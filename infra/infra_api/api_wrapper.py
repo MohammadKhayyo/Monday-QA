@@ -44,6 +44,7 @@ class MondayApi:
     def handle_response_errors(self, response):
         #  "status_code" in response and response["status_code"] == 429 and
         if 'errors' in response:
+            print('errors:', response['errors'])
             errors = response['errors']
             for error in errors:
                 if 'message' in error:
@@ -59,6 +60,7 @@ class MondayApi:
                             seconds_to_rest = int(seconds_to_rest) + 1
                         else:
                             seconds_to_rest = 5
+                    print("waiting for ", seconds_to_rest)
                     sleep(seconds_to_rest)
                     return False
                 else:
