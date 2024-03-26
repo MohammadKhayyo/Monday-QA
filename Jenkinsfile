@@ -11,10 +11,8 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-//                 bat "${PYTHON_PATH} -m venv venv"
-//                 bat 'venv\\Scripts\\python.exe -m pip install --upgrade pip'
-//                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
-                   bat "${PIP_PATH} install -r requirements.txt"
+//                 bat 'C:\\Python\\Python312\\python.exe -m venv venv'
+                bat "${PIP_PATH} install -r requirements.txt"
             }
             post {
                 success {
@@ -55,7 +53,7 @@ pipeline {
                 }
             }
         }
-        stage('Running Tests') {
+        stage(' Running Tests') {
             steps {
                 echo 'Testing..'
                 bat "${PYTHON_PATH} test_runner_ui_api.py"
@@ -83,30 +81,17 @@ pipeline {
                 }
             }
         }
-        stage('Publish Report') {
-            steps {
-                script {
-                    // Ensure reports directory contents
-                    bat 'dir reports'
-
-                    // Compress and capture output
-                    def compressOutput = bat(script: 'powershell -Command "Compress-Archive -Path reports\\* -DestinationPath report.zip -Force" 2>&1', returnStdout: true).trim()
-                    echo "Compression Output: ${compressOutput}"
-
-                    // Check if report.zip was created
-                    if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
-                        echo 'report.zip exists. Proceeding to archive...'
-                        archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
-                    } else {
-                        error 'report.zip does not exist after compression attempt.'
-                    }
-                }
-            }
-        }
+         stage('Publish Report') {
+             steps {
+                bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
+                archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+    }
+}
     }
     post {
         always {
             echo 'Cleaning up...'
+            // General cleanup notification
             slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {
