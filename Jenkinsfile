@@ -82,27 +82,17 @@ pipeline {
         stage('Publish Report') {
             steps {
                 script {
-                    // Display the current directory to confirm path
                     bat 'echo Current Directory: %CD%'
+                    bat 'dir reports'
 
-                    // Ensure the reports directory exists and contains files
-                    if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
-                        echo 'Reports directory exists and is not empty. Proceeding with compression...'
+                    def compressCmd = 'powershell -Command "Compress-Archive -Path reports\\* -DestinationPath report.zip -Force" 2>&1'
+                    def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
+                    echo "Compression Output: ${compressOutput}"
 
-                        // Attempt to compress the reports directory into report.zip and capture output
-                        def compressCmd = 'powershell -Command "Compress-Archive -Path reports\\* -DestinationPath report.zip -Force" 2>&1'
-                        def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
-                        echo "Compression Output: ${compressOutput}"
-
-                        // Verify report.zip was created
-                        if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
-                            echo 'report.zip exists. Proceeding to archive...'
-                            archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
-                        } else {
-                            error 'report.zip does not exist after compression attempt.'
-                        }
+                    if (compressOutput.contains("report.zip exists")) {
+                        archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
                     } else {
-                        error 'Reports directory is empty or does not exist. Skipping compression...'
+                        error 'report.zip does not exist after compression attempt.'
                     }
                 }
             }
