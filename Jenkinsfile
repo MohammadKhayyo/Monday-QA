@@ -4,13 +4,17 @@ pipeline {
         // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
+        PIP_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe'
+        PYTHON_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
     }
     stages {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
-                bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
+//                 bat "${PYTHON_PATH} -m venv venv"
+//                 bat 'venv\\Scripts\\python.exe -m pip install --upgrade pip'
+//                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
+                   bat "${PIP_PATH} install -r requirements.txt"
             }
             post {
                 success {
@@ -54,7 +58,7 @@ pipeline {
         stage('Running Tests') {
             steps {
                 echo 'Testing..'
-                bat "venv\\Scripts\\python.exe test_runner_ui_api.py"
+                bat "${PYTHON_PATH} test_runner_ui_api.py"
             }
             post {
                 success {
