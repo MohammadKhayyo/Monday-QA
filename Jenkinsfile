@@ -79,6 +79,7 @@ pipeline {
                 }
             }
         }
+
         stage('Publish Report') {
             steps {
                 script {
@@ -87,8 +88,12 @@ pipeline {
                     if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
                         echo 'Reports directory exists and is not empty. Proceeding with compression using 7-Zip...'
 
+                        // Ensure we're using absolute paths
                         def pathTo7Zip = '"C:\\Program Files\\7-Zip\\7z.exe"'
-                        def compressCmd = "${pathTo7Zip} a -tzip report.zip reports\\* -mx=9"
+                        def workspaceDir = env.WORKSPACE.replace('\\', '\\\\')
+                        def compressCmd = "${pathTo7Zip} a -tzip ${workspaceDir}\\\\report.zip ${workspaceDir}\\\\reports\\\\* -mx=9"
+
+                        // Execute compression and capture both output and status
                         def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
                         echo "Compression Output: ${compressOutput}"
 
