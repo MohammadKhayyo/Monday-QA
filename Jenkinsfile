@@ -1,9 +1,7 @@
 pipeline {
     agent any
     environment {
-        // This will set the TOKEN variable in the environment
-//        PIP_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe'
-//        PYTHON_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
+        // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
     }
@@ -84,10 +82,18 @@ pipeline {
         stage('Publish Report') {
             steps {
                 script {
+                    // Check if the reports directory contains files
                     if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
                         echo 'Reports directory exists and is not empty. Proceeding with compression...'
+                        // Attempt to compress the reports directory into report.zip
                         bat 'powershell Compress-Archive -Path reports\\* -DestinationPath report.zip -Force'
-                        archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+                        // Check if report.zip was successfully created
+                        if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
+                            echo 'report.zip created successfully. Proceeding to archive...'
+                            archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+                        } else {
+                            error 'Failed to create report.zip. The file does not exist.'
+                        }
                     } else {
                         error 'Reports directory is empty or does not exist. Skipping compression...'
                     }
