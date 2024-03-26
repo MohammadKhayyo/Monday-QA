@@ -1,46 +1,28 @@
-import os
 import subprocess
 from Utils.configurations import ConfigurationManager
 
 
 def run_pytest(parallel=False):
-    ui_tests_path = "Tests/test_ui_api"
-    reports_dir = "reports"
-    os.makedirs(reports_dir, exist_ok=True)
+    # Directory where all tests are located
+    ui_tests_path = "Tests/test_ui"
 
-    # Assuming Anaconda environment is named 'myenv', and Anaconda is installed in the default location.
-    # This example will directly use the Anaconda environment's Python executable.
-    # It's better to activate the environment and use a simple 'python' command,
-    # ensuring this script is called from an environment where 'myenv' is activated.
-    python_path = "C:\\ProgramData\\Anaconda3\\envs\\myenv\\pythonw.exe"
+    # Basic command with the path to UI tests
+    cmd = ["pytest", ui_tests_path, "--html=report.html"]
 
-    # Base command using the Anaconda environment's Python
-    base_cmd = [python_path, "-m", "pytest", ui_tests_path]
-
-    html_report = os.path.join(reports_dir, "report.html")
-
+    # If parallel execution is enabled, modify the command to run with xdist
     if parallel:
-        parallel_cmd = base_cmd + ["-n", "8", "-m", "not serial", f"--html={html_report}"]
-        try:
-            subprocess.run(parallel_cmd, check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Tests failed with return code {e.returncode}. Continuing the build...")
+        # Runs all tests except those marked as 'serial'
+        cmd.extend(["-n", "8", "-m", "not serial"])
+        subprocess.run(cmd)
 
-    try:
-        serial_html_report = os.path.join(reports_dir, "report_serial.html")
-        serial_cmd = base_cmd + ["-m", "serial", f"--html={serial_html_report}"]
-        subprocess.run(serial_cmd, check=True)
-    except subprocess.CalledProcessError as e:
-        if e.returncode == 5:  # No tests were collected
-            print("No serial tests were found.")
-        else:
-            print(e.returncode)
+        # Now run the serial tests without xdist
+        cmd = ["pytest", ui_tests_path, "-m", "serial", "--html=report_serial.html"]
     else:
-        non_parallel_cmd = base_cmd + [f"--html={html_report}"]
-        try:
-            subprocess.run(non_parallel_cmd, check=True)
-        except subprocess.CalledProcessError as e:
-            print(e.returncode)
+        # Optionally, use a different report name for serial tests
+        cmd.extend(["--html=report_serial.html"])
+
+    # Execute the pytest command
+    subprocess.run(cmd)
 
 
 if __name__ == "__main__":
