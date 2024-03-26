@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         // This will set the TOKEN variable in the environment
-        PIP_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe'
-        PYTHON_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
+//         PIP_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe'
+//         PYTHON_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
     }
@@ -11,7 +11,7 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
+                bat 'C:\\ProgramData\\Anaconda3\\python.exe -m venv venv'
                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
             post {
