@@ -5,7 +5,7 @@ from Utils.configurations import ConfigurationManager
 
 def run_pytest(parallel=False):
 
-    ui_tests_path = "Tests/test_ui/End_to_End"
+    ui_tests_path = "Tests/test_ui_api"
     reports_dir = "reports"
     os.makedirs(reports_dir, exist_ok=True)
 
