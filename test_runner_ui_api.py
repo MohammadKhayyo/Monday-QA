@@ -4,14 +4,17 @@ from Utils.configurations import ConfigurationManager
 
 
 def run_pytest(parallel=False):
-
     ui_tests_path = "Tests/test_ui_api"
     reports_dir = "reports"
     os.makedirs(reports_dir, exist_ok=True)
 
-    python_path = os.path.join("venv", "Scripts", "python.exe")
+    # Assuming Anaconda environment is named 'myenv', and Anaconda is installed in the default location.
+    # This example will directly use the Anaconda environment's Python executable.
+    # It's better to activate the environment and use a simple 'python' command,
+    # ensuring this script is called from an environment where 'myenv' is activated.
+    python_path = "C:\\ProgramData\\Anaconda3\\envs\\myenv\\pythonw.exe"
 
-    # Base command using the virtual environment's Python
+    # Base command using the Anaconda environment's Python
     base_cmd = [python_path, "-m", "pytest", ui_tests_path]
 
     html_report = os.path.join(reports_dir, "report.html")
@@ -38,6 +41,7 @@ def run_pytest(parallel=False):
             subprocess.run(non_parallel_cmd, check=True)
         except subprocess.CalledProcessError as e:
             print(e.returncode)
+
 
 if __name__ == "__main__":
     config_manager = ConfigurationManager()
