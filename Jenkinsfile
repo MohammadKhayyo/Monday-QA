@@ -82,17 +82,27 @@ pipeline {
         stage('Publish Report') {
             steps {
                 script {
-                    bat 'echo Current Directory: %CD%'
-                    bat 'dir reports'
+                    // Check if the reports directory contains files
+                    if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
+                        echo 'Reports directory exists and is not empty. Proceeding with compression using 7-Zip...'
 
-                    def compressCmd = 'powershell -Command "Compress-Archive -Path reports\\* -DestinationPath report.zip -Force" 2>&1'
-                    def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
-                    echo "Compression Output: ${compressOutput}"
+                        // Specify the path to the 7-Zip executable
+                        def pathTo7Zip = '"C:\\Program Files\\7-Zip\\7z.exe"'
 
-                    if (compressOutput.contains("report.zip exists")) {
-                        archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+                        // Compress the reports directory into report.zip using 7-Zip
+                        def compressCmd = "${pathTo7Zip} a -tzip report.zip reports\\* -mx=9"
+                        def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
+                        echo "Compression Output: ${compressOutput}"
+
+                        // Verify report.zip was created
+                        if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
+                            echo 'report.zip exists. Proceeding to archive...'
+                            archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+                        } else {
+                            error 'report.zip does not exist after compression attempt with 7-Zip.'
+                        }
                     } else {
-                        error 'report.zip does not exist after compression attempt.'
+                        error 'Reports directory is empty or does not exist. Skipping compression...'
                     }
                 }
             }
