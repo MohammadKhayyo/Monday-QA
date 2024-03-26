@@ -4,15 +4,13 @@ pipeline {
         // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
-        PIP_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe'
-        PYTHON_PATH = 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
     }
     stages {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-//                 bat 'C:\\Python\\Python312\\python.exe -m venv venv'
-                bat "${PIP_PATH} install -r requirements.txt"
+                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
+                bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
             post {
                 success {
@@ -53,10 +51,10 @@ pipeline {
                 }
             }
         }
-        stage(' Running Tests') {
+        stage('Running Tests') {
             steps {
                 echo 'Testing..'
-                bat "${PYTHON_PATH} test_runner_ui_api.py"
+                bat "venv\\Scripts\\python.exe test_runner_ui_api.py"
             }
             post {
                 success {
@@ -70,7 +68,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                // Your deployment steps here
+                // Deployment steps go here
             }
             post {
                 success {
@@ -81,17 +79,38 @@ pipeline {
                 }
             }
         }
-         stage('Publish Report') {
-             steps {
-                bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
-                archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
-    }
-}
+        stage('Publish Report') {
+            steps {
+                script {
+                    // Display the current directory to confirm path
+                    bat 'echo Current Directory: %CD%'
+
+                    // Ensure the reports directory exists and contains files
+                    if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
+                        echo 'Reports directory exists and is not empty. Proceeding with compression...'
+
+                        // Attempt to compress the reports directory into report.zip and capture output
+                        def compressCmd = 'powershell -Command "Compress-Archive -Path reports\\* -DestinationPath report.zip -Force" 2>&1'
+                        def compressOutput = bat(script: compressCmd, returnStdout: true).trim()
+                        echo "Compression Output: ${compressOutput}"
+
+                        // Verify report.zip was created
+                        if (bat(script: 'if exist report.zip (exit 0) else (exit 1)', returnStatus: true) == 0) {
+                            echo 'report.zip exists. Proceeding to archive...'
+                            archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+                        } else {
+                            error 'report.zip does not exist after compression attempt.'
+                        }
+                    } else {
+                        error 'Reports directory is empty or does not exist. Skipping compression...'
+                    }
+                }
+            }
+        }
     }
     post {
         always {
             echo 'Cleaning up...'
-            // General cleanup notification
             slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {
