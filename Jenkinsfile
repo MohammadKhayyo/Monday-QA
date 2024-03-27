@@ -4,18 +4,13 @@ pipeline {
         // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
-        ANACONDA_PATH = 'C:\\ProgramData\\Anaconda3'
     }
     stages {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat '''
-                call ${ANACONDA_PATH}\\Scripts\\activate.bat
-                call conda create --name myenv python=3.9 -y
-                call conda activate myenv
-                call pip install -r requirements.txt
-                '''
+//                 bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
+//                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
             post {
                 success {
@@ -59,10 +54,7 @@ pipeline {
         stage(' Running Tests') {
             steps {
                 echo 'Testing..'
-                    bat '''
-                    call ${ANACONDA_PATH}\\Scripts\\activate.bat myenv
-                    call python test_runner_ui_api_pytest.py
-                    '''
+                bat """C:\\ProgramData\\Anaconda3\\pythonw.exe C:\\Users\\Moham\\Videos\\mondat_POC\\test_runner_ui_api.py"""
             }
             post {
                 success {
@@ -97,11 +89,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat '''
-            call ${ANACONDA_PATH}\\Scripts\\activate.bat myenv
-            call conda deactivate
-            call conda env remove -n myenv -y
-            '''
+            // General cleanup notification
             slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {
