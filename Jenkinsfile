@@ -89,21 +89,10 @@ pipeline {
             }
         }
         stage('Publish Report') {
-            steps {
-                script {
-                    bat 'echo Current Working Directory: %CD%'
-                    bat 'dir reports\\*'
-                    if (bat(script: 'if exist reports\\* (exit 0) else (exit 1)', returnStatus: true) == 0) {
-                        echo 'Reports directory exists and is not empty. Proceeding with compression using 7-Zip...'
-
-                        def pathTo7Zip = '"C:\\Program Files\\7-Zip\\7z.exe"'
-                        bat "${pathTo7Zip} a -tzip report.zip reports\\* -mx=9"
-
-                        archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
-                    } else {
-                        error 'Reports directory is empty or does not exist. Skipping compression...'
-                    }
-                }
+             steps {
+                bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
+                archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+    }
             }
         }
     }
