@@ -2,18 +2,14 @@ pipeline {
     agent any
     environment {
         // Environment variables setup
-        TOKEN = credentials('secret_token')
+        API_MONDAY = credentials('token_monday')
+        JIRA_TOKEN = credentials('token_jira')
         ANACONDA_PATH = 'C:\\ProgramData\\Anaconda3'
     }
     stages {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment with Anaconda...'
-                            bat '''
-            call ${ANACONDA_PATH}\\Scripts\\activate.bat myenv
-            call conda deactivate
-            call conda env remove -n myenv -y
-            '''
                 bat '''
                 call ${ANACONDA_PATH}\\Scripts\\activate.bat
                 call conda create --name myenv python=3.9 -y
