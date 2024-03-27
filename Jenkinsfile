@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Setup Environment') {
             steps {
-                echo 'Setting up Python environment with Anaconda...'
+                echo 'Setting up Python environment...'
                 bat '''
                 call ${ANACONDA_PATH}\\Scripts\\activate.bat
                 call conda create --name myenv python=3.9 -y
@@ -19,10 +19,10 @@ pipeline {
             }
             post {
                 success {
-                    slackSend (color: 'good', message: "SUCCESS: Setup Environment stage completed successfully with Anaconda.")
+                    slackSend (color: 'good', message: "SUCCESS: Setup Environment stage completed successfully.")
                 }
                 failure {
-                    slackSend (color: 'danger', message: "FAILURE: Setup Environment stage failed with Anaconda.")
+                    slackSend (color: 'danger', message: "FAILURE: Setup Environment stage failed.")
                 }
             }
         }
@@ -56,14 +56,13 @@ pipeline {
                 }
             }
         }
-        stage('Running Tests') {
+        stage(' Running Tests') {
             steps {
-                script {
+                echo 'Testing..'
                     bat '''
                     call ${ANACONDA_PATH}\\Scripts\\activate.bat myenv
                     call python test_runner_ui_api_pytest.py
                     '''
-                }
             }
             post {
                 success {
@@ -77,7 +76,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                // Deployment steps go here
+                // Your deployment steps here
             }
             post {
                 success {
@@ -88,13 +87,12 @@ pipeline {
                 }
             }
         }
-        stage('Publish Report') {
+         stage('Publish Report') {
              steps {
                 bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
                 archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
     }
-            }
-        }
+}
     }
     post {
         always {
@@ -104,7 +102,7 @@ pipeline {
             call conda deactivate
             call conda env remove -n myenv -y
             '''
-            slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources and removing Anaconda environment.")
+            slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {
             echo 'Build succeeded.'
