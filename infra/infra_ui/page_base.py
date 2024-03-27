@@ -63,15 +63,15 @@ class BasePage():
     def __init__(self, driver):
         self._driver = driver
 
-    def click_when_clickable(self, locator):
-        self.wait_for_element(locator)
-        self.wait_for_visibility_of_element_located(locator)
-        element = WebDriverWait(self._driver, 30).until(EC.element_to_be_clickable(locator))
+    def click_when_clickable(self, locator, time_out=30):
+        self.wait_for_element(locator, time_out=time_out)
+        self.wait_for_visibility_of_element_located(locator, time_out=time_out)
+        element = WebDriverWait(self._driver, time_out).until(EC.element_to_be_clickable(locator))
         element.click()
         return element
 
-    def wait_for_element(self, locator):
-        return WebDriverWait(self._driver, 30).until(EC.presence_of_element_located(locator))
+    def wait_for_element(self, locator, time_out=30):
+        return WebDriverWait(self._driver, time_out).until(EC.presence_of_element_located(locator))
 
     def wait_for_visibility_of_element_located(self, locator, time_out=30):
         return WebDriverWait(self._driver, time_out).until(EC.visibility_of_element_located(locator))
@@ -92,8 +92,16 @@ class BasePage():
 
     def clickable_element(self, locator, time_out=30):
         """Wait for an element to be clickable and then click."""
-        self.wait_for_element(locator)
-        self.wait_for_visibility_of_element_located(locator)
+        try:
+            self.wait_for_visibility_of_element_located(locator, time_out=time_out)
+        except:
+            pass
+
+        try:
+            self.wait_for_element(locator, time_out=time_out)
+        except:
+            pass
+
         element = WebDriverWait(self._driver, time_out).until(EC.element_to_be_clickable(locator))
         return element
 
@@ -107,14 +115,38 @@ class BasePage():
             self.clickable_element(tab)
             self.click_when_clickable(tab)
         except:
-            self.wait_for_visibility_of_element_located(ELEMENT)
-            self.wait_for_element(ELEMENT)
-            self.clickable_element(ELEMENT)
-            self.click_when_clickable(ELEMENT)
-            self.wait_for_element(tab)
-            self.wait_for_visibility_of_element_located(tab)
-            self.clickable_element(tab)
-            self.click_when_clickable(tab)
+            try:
+                self.wait_for_visibility_of_element_located(ELEMENT, time_out=3)
+            except:
+                pass
+            try:
+                self.wait_for_element(ELEMENT, time_out=3)
+            except:
+                pass
+            try:
+                self.clickable_element(ELEMENT, time_out=3)
+            except:
+                pass
+            try:
+                self.click_when_clickable(ELEMENT, time_out=3)
+            except:
+                pass
+            try:
+                self.wait_for_element(tab, time_out=3)
+            except:
+                pass
+            try:
+                self.wait_for_visibility_of_element_located(tab, time_out=3)
+            except:
+                pass
+            try:
+                self.clickable_element(tab, time_out=3)
+            except:
+                pass
+            try:
+                self.click_when_clickable(tab, time_out=3)
+            except:
+                pass
 
     def switch_to_tab(self, tab):
         try:
@@ -131,23 +163,23 @@ class BasePage():
         #     self.clickable_element(self.Main_table_Tasks)
         #     self.click_when_clickable(self.Main_table_Tasks)
         # self.switch_and_click(ELEMENT, self.Main_table_Tasks)
-        self.click_when_clickable(NEW_ELEMENT)
+        self.click_when_clickable(NEW_ELEMENT, time_out=3)
         try:
-            self.wait_for_element(TEXT_NEW)
-            self.wait_for_visibility_of_element_located(TEXT_NEW)
-            name_field = self.clickable_element(TEXT_NEW)
+            self.wait_for_element(TEXT_NEW, time_out=3)
+            self.wait_for_visibility_of_element_located(TEXT_NEW, time_out=3)
+            name_field = self.clickable_element(TEXT_NEW, time_out=3)
         except:
-            self.wait_for_element(NAME_NEW)
-            self.wait_for_visibility_of_element_located(NAME_NEW)
+            self.wait_for_element(NAME_NEW, time_out=3)
+            self.wait_for_visibility_of_element_located(NAME_NEW, time_out=3)
             names = self._driver.find_elements(*NAME_NEW)
             for element in names:
                 if element.text.lower() == name_new.lower():
                     element.click()
                     break
             try:
-                self.wait_for_element(TEXT_NEW)
-                self.wait_for_visibility_of_element_located(TEXT_NEW)
-                name_field = self.clickable_element(TEXT_NEW)
+                self.wait_for_element(TEXT_NEW, time_out=3)
+                self.wait_for_visibility_of_element_located(TEXT_NEW, time_out=3)
+                name_field = self.clickable_element(TEXT_NEW, time_out=3)
             except:
                 return False
         name_field.send_keys(Keys.CONTROL + "a")
