@@ -6,9 +6,10 @@ from logic.logic_ui.login_page import LoginPage
 from logic.logic_ui.Epics_page import EpicsPage
 from logic.logic_ui.Home_page import HomePage
 from Utils import generate_string
-
+from infra.infra_jira.jira_wrapper import JiraWrapper
 from parameterized import parameterized_class
 from Utils.configurations import ConfigurationManager
+from Utils.error_handling import test_decorator
 
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
@@ -30,6 +31,9 @@ class ParallelEpicsTests(unittest.TestCase):
         self.epics_Page = EpicsPage(self.driver)
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
+        self.jira_client = JiraWrapper()
+        self.test_failed = False
+        self.error_msg = ""
 
     def test_bulk_epic_removal_by_name(self):
         unique_epic_name = generate_string.create_secure_string()
@@ -40,6 +44,7 @@ class ParallelEpicsTests(unittest.TestCase):
         operationStatus = self.epics_Page.bulkDeleteEpics(unique_epic_name, "all")
         self.assertTrue(operationStatus, "Bulk deletion of epics by name failed")
 
+    @test_decorator
     def test_create_and_remove_epic(self):
         epic_name = generate_string.create_secure_string()
         creationOutcome = self.epics_Page.add_new_epic(epic_name)  # Use a unique name to ensure the test is reliable
@@ -54,3 +59,13 @@ class ParallelEpicsTests(unittest.TestCase):
     def tearDown(self):
         if self.driver:
             self.driver.quit()
+        if self.test_failed:
+            self.test_name = self.id().split('.')[-1]
+            summary = f"{self.test_name} "
+            description = f"{self.error_msg} browser {self.browser}"
+            try:
+                issue_key = self.jira_client.create_issue(summery=summary, description=description,
+                                                          issue_type='Bug', project_key='KP')
+                print(f"Jira issue created: {issue_key}")
+            except Exception as e:
+                print(f"Failed to create Jira issue: {e}")

@@ -1,4 +1,5 @@
 import unittest
+import pytest
 from Utils import users
 from infra.infra_ui.browser_wrapper import WebDriverManager
 from logic.logic_ui.login_page import LoginPage
@@ -12,12 +13,14 @@ from logic.logic_api.group import Group
 from parameterized import parameterized_class
 from Utils.configurations import ConfigurationManager
 from Utils import generate_string
+from Utils.error_handling import test_decorator
 
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
+@pytest.mark.serial
 @parameterized_class(('browser',), browser_types)
 class AddBoardTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
@@ -42,10 +45,12 @@ class AddBoardTests(unittest.TestCase):
                            exists=False)
         self.group = Group(board=self.board, group_name=self.group_name, exist=False)
 
+    @test_decorator
     def test_add_board(self):
         status = self.home_page.check_add_board(_name=self.board_name)
         self.assertTrue(status)
 
+    @test_decorator
     def test_add_file(self):
         file_path = "file1.txt"
         data_column = {"title": "Attached Files", "column_type": "file", "description": "",
@@ -61,6 +66,7 @@ class AddBoardTests(unittest.TestCase):
             contents = file.read()
         self.assertEqual(text, contents)
 
+    @test_decorator
     def test_check_group(self):
         dic_groups_via_api = self.board.get_all_group()
         self.home_page.switch_board(_name=self.board_name)
@@ -72,6 +78,7 @@ class AddBoardTests(unittest.TestCase):
         list_groups_via_UI.sort()
         self.assertListEqual(list_groups_via_api, list_groups_via_UI)
 
+    @test_decorator
     def test_add_link(self):
         data_column = {"title": "Link", "column_type": "link", "description": "A link to a website",
                        "link": "www.google.com", "placeholder": "search with google"}

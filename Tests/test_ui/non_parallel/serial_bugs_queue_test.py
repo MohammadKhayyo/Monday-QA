@@ -8,6 +8,7 @@ import pytest
 from parameterized import parameterized_class
 from Utils.configurations import ConfigurationManager
 from infra.infra_jira.jira_wrapper import JiraWrapper
+from Utils.error_handling import test_decorator
 
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
@@ -15,9 +16,7 @@ browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
 @pytest.mark.serial
-@parameterized_class(('browser',), [
-    ('chrome',),
-])
+@parameterized_class(('browser',), browser_types)
 class BugsQueueTests(unittest.TestCase):
     VALID_USERS = users.authentic_users
 
@@ -34,7 +33,9 @@ class BugsQueueTests(unittest.TestCase):
         self.home_page.changeEnvironment(environment_name="dev")
         self.jira_client = JiraWrapper()
         self.test_failed = False
+        self.error_msg = ""
 
+    @test_decorator
     def test_revert_bulk_deletion_of_bugs(self):
         try:
             operationOutcome = self.bugs_queue_page.revertBulkBugDeletion()
@@ -49,9 +50,9 @@ class BugsQueueTests(unittest.TestCase):
         if self.driver:
             self.driver.quit()
 
-        self.test_name = self.id().split('.')[-1]
         if self.test_failed:
-            summary = f"Test failed: {self.test_name} "
+            self.test_name = self.id().split('.')[-1]
+            summary = f"{self.test_name} "
             description = f"{self.error_msg} browser {self.browser}"
             try:
                 issue_key = self.jira_client.create_issue(summery=summary, description=description,

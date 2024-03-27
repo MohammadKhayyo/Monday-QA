@@ -4,6 +4,8 @@ from logic.logic_api.work_space import WorkSpace
 from logic.logic_api.board import Board
 from logic.logic_api.column import Column
 from Utils import generate_string
+from infra.infra_jira.jira_wrapper import JiraWrapper
+from Utils.error_handling import test_decorator
 
 
 class ColumnTest(unittest.TestCase):
@@ -17,10 +19,24 @@ class ColumnTest(unittest.TestCase):
         self.work_space = WorkSpace(work_space_name=self.work_space_name)
         self.board = Board(work_space=self.work_space, board_name=self.board_name, folder_name=self.folder_name,
                            exists=False)
+        self.jira_client = JiraWrapper()
+        self.test_failed = False
+        self.error_msg = ""
 
     def tearDown(self):
         self.board.delete_board()
+        if self.test_failed:
+            self.test_name = self.id().split('.')[-1]
+            summary = f"{self.test_name}"
+            description = self.error_msg
+            try:
+                issue_key = self.jira_client.create_issue(summery=summary, description=description,
+                                                          issue_type='Bug', project_key='KP')
+                print(f"Jira issue created: {issue_key}")
+            except Exception as e:
+                print(f"Failed to create Jira issue: {e}")
 
+    @test_decorator
     def test_create_and_delete_columns(self):
         test_cases = [
             {"title": "Date", "column_type": "date", "description": "When the row was added to the board"},

@@ -1,22 +1,43 @@
-import traceback
+import pytest
 
 
-def report_status(self):
-    for test, exc_info in self._outcome.errors:
-        if exc_info:
-            # This will format the exception information into a string
-            error_type, error_instance, error_traceback = exc_info
-            formatted_traceback = ''.join(traceback.format_exception(error_type, error_instance, error_traceback))
-            description = f"Test {self._testMethodName} failed: {str(error_instance)}\n{formatted_traceback}"
-            error_message = f"{self._test_errors}" if self._test_errors else description
-            issue_key = self.jira.create_issue(self.summary, error_message,
-                                               self.project_key)
-            print(f"Created JIRA issue: {issue_key}")
+@pytest.mark.skip(reason="This test handel the error")
+def test_decorator(test_func):
+    def wrapper(*args, **kwargs):
+        try:
+            test_func(*args, **kwargs)
+        except AssertionError as e:
+            print(f"Assertion Error in {test_func.__name__}: {e}")
+            args[0].test_failed = True
+            args[0].error_msg = str(e)
+            raise
+        except Exception as e:
+            print(f"Unexpected Error in {test_func.__name__}: {e}")
+            args[0].test_failed = True
+            args[0].error_msg = str(e)
+            raise
+
+    return wrapper
 
 
-def assertAndCapture(self, assertion_callable, *args, **kwargs):
-    try:
-        assertion_callable(*args, **kwargs)
-    except Exception as e:  # Catch any kind of exception
-        self._test_errors = (e.__class__.__name__, str(e), e.__traceback__)
-        raise
+# Hook to modify the Pytest test report
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, f"rep_{rep.when}", rep)
+
+
+# Fixture automatically applied to each test for handling outcomes
+@pytest.fixture(autouse=True)
+def handle_test_outcomes(request):
+    yield
+    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+        # Logic for failed tests
+        test_name = request.node.nodeid
+        print(f"Test failed: {test_name}")
+        # Here, you can integrate custom logic such as creating a JIRA issue
+
+        # Example: Log the failure or call a function to handle the failure
+        # This could be logging to a file, sending an email, or any other action
+        # log_test_failure(test_name, request.node.rep_call.longreprtext)

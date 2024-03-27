@@ -6,9 +6,11 @@ from logic.logic_ui.login_page import LoginPage
 from logic.logic_ui.Retrospectives_page import RetrospectivesPage
 from logic.logic_ui.Home_page import HomePage
 from Utils import generate_string
+from Utils.error_handling import test_decorator
 
 from parameterized import parameterized_class
 from Utils.configurations import ConfigurationManager
+from infra.infra_jira.jira_wrapper import JiraWrapper
 
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
@@ -30,7 +32,11 @@ class ParallelRetrospectivesTests(unittest.TestCase):
         self.retrospective_Interface = RetrospectivesPage(self.driver)
         self.home_page = HomePage(self.driver)
         self.home_page.changeEnvironment(environment_name="dev")
+        self.jira_client = JiraWrapper()
+        self.test_failed = False
+        self.error_msg = ""
 
+    @test_decorator
     def test_bulk_delete_retrospectives_with_matching_name(self):
         unique_task_name = generate_string.create_secure_string()
         random_number = random.randint(2, 5)
@@ -40,6 +46,7 @@ class ParallelRetrospectivesTests(unittest.TestCase):
         outcome = self.retrospective_Interface.bulkDeleteRetrospectives(unique_task_name, "all")
         self.assertTrue(outcome, "Failed to undo the bulk deletion of retrospectives.")
 
+    @test_decorator
     def test_create_and_remove_retrospective(self):
         task_name = generate_string.create_secure_string()
         creationStatus = self.retrospective_Interface.add_new_retrospective(task_name)
@@ -54,3 +61,13 @@ class ParallelRetrospectivesTests(unittest.TestCase):
     def tearDown(self):
         if self.driver:
             self.driver.quit()
+        if self.test_failed:
+            self.test_name = self.id().split('.')[-1]
+            summary = f"{self.test_name} "
+            description = f"{self.error_msg} browser {self.browser}"
+            try:
+                issue_key = self.jira_client.create_issue(summery=summary, description=description,
+                                                          issue_type='Bug', project_key='KP')
+                print(f"Jira issue created: {issue_key}")
+            except Exception as e:
+                print(f"Failed to create Jira issue: {e}")
