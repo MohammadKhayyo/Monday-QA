@@ -29,7 +29,7 @@ class MondayApi:
     def post_request(self, query, until_status_code_429=False):
         while True:
             response = self.send_request(query)
-            if self.handle_response_errors(response=response, until_status_code_429=False):
+            if self.handle_response_errors(response=response, until_status_code_429=until_status_code_429):
                 break
         try:
             if self.print_api_protocol:

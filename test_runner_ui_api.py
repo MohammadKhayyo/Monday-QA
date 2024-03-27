@@ -1,24 +1,32 @@
-import os
 import subprocess
+from Utils.configurations import ConfigurationManager
 
 
 def run_pytest(parallel=False):
-    # Load configuration
-    ui_tests_path = "test/api_and_ui"
-    reports_dir = "reports"
-    os.makedirs(reports_dir, exist_ok=True)
+    # Directory where all tests are located
+    ui_tests_path = "Tests/run_in_jenkins"
 
-    # Base command using the virtual environment's Python
-    base_cmd = ["venv\\Scripts\\python.exe", "-m", "pytest", ui_tests_path]
+    # Basic command with the path to UI tests
+    cmd = ["pytest", ui_tests_path, "--html=report.html"]
 
-    html_report = os.path.join(reports_dir, "report.html")
+    # If parallel execution is enabled, modify the command to run with xdist
+    if parallel:
+        # Runs all tests except those marked as 'serial'
+        cmd.extend(["-n", "4", "-m", "not serial"])
+        subprocess.run(cmd)
 
-    non_parallel_cmd = base_cmd + [f"--html={html_report}"]
-    try:
-        subprocess.run(non_parallel_cmd, check=True)
-    except subprocess.CalledProcessError as e:
-        print(e.returncode)
+        # Now run the serial tests without xdist
+        cmd = ["pytest", ui_tests_path, "-m", "serial", "--html=report_serial.html"]
+    else:
+        # Optionally, use a different report name for serial tests
+        cmd.extend(["--html=report_serial.html"])
+
+    # Execute the pytest command
+    subprocess.run(cmd)
 
 
 if __name__ == "__main__":
-    run_pytest(parallel=False)
+    config_manager = ConfigurationManager()
+    settings = config_manager.load_settings()
+    is_parallel = settings['parallel']
+    run_pytest(parallel=is_parallel)

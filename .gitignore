@@ -1,13 +1,12 @@
 # Environment variables
 .env
-.env
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-
+.dockerignore
 # C extensions
 *.so
-
+venv
 # Distribution / packaging
 .Python
 build/
@@ -77,12 +76,9 @@ docs/_build/
 **/*.pyo
 **/*.pyd
 .DS_Store
-.env
 .venv
-venv
 .git
 __pycache__
 */__pycache__
 .idea
-__pycache__
 Utils/__pycache__
