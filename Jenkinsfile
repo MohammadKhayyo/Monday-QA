@@ -4,13 +4,16 @@ pipeline {
         // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
+        ANACONDA_PATH = 'C:\\ProgramData\\Anaconda3'
     }
     stages {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
-                bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
+//                 bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m venv venv'
+//                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
+                bat "${env.ANACONDA_PATH}\\Scripts\\activate.bat && conda create --name myenv python=3.9 -y"
+                bat "${env.ANACONDA_PATH}\\Scripts\\activate.bat && conda activate myenv && pip install -r requirements.txt"
             }
             post {
                 success {
@@ -54,7 +57,10 @@ pipeline {
         stage(' Running Tests') {
             steps {
                 echo 'Testing..'
-                bat "venv\\Scripts\\python.exe test_runner_ui_api_pytest.py"
+                bat '''
+                    call C:\\ProgramData\\Anaconda3\\Scripts\\activate.bat myenv
+                    call python test_runner_ui_api.py
+                    '''
             }
             post {
                 success {
