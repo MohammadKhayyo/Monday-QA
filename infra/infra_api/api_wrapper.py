@@ -26,10 +26,10 @@ class MondayApi:
         response = json.loads(response_str)
         return response
 
-    def post_request(self, query):
+    def post_request(self, query, until_status_code_429=False):
         while True:
             response = self.send_request(query)
-            if self.handle_response_errors(response=response):
+            if self.handle_response_errors(response=response, until_status_code_429=False):
                 break
         try:
             if self.print_api_protocol:
@@ -44,7 +44,7 @@ class MondayApi:
                 print()
             return response
 
-    def handle_response_errors(self, response):
+    def handle_response_errors(self, response, until_status_code_429=False):
         #  "status_code" in response and response["status_code"] == 429 and
         if 'errors' in response:
             print('errors:', response['errors'])
@@ -64,6 +64,8 @@ class MondayApi:
                         else:
                             seconds_to_rest = 5
                     print("waiting for ", seconds_to_rest)
+                    if until_status_code_429:
+                        raise Exception("Too Many request")
                     sleep(seconds_to_rest)
                     return False
                 else:

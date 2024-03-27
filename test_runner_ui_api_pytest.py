@@ -7,14 +7,14 @@ def run_pytest(parallel=False):
     # Load configuration
     config = ConfigurationManager().load_settings()
 
-    ui_tests_path = "Tests/demo"
+    ui_tests_path = "Tests/demo/api_ui_test.py"
     reports_dir = "reports"
     os.makedirs(reports_dir, exist_ok=True)
 
     python_path = os.path.join("venv", "Scripts", "python.exe")
     # python_path = "C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
     # Base command using the virtual environment's Python
-    base_cmd = ["cd  C:\\Users\\Moham\\Videos\\mondat_POC | venv/Scripts/python.exe", "-m", "pytest", ui_tests_path]
+    base_cmd = ["venv/Scripts/python.exe", "-m", "pytest", ui_tests_path]  # cd  C:\\Users\\Moham\\Videos\\mondat_POC |
 
     html_report = os.path.join(reports_dir, "report.html")
 
