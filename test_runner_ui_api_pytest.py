@@ -11,7 +11,7 @@ def run_pytest(parallel=False):
     reports_dir = "reports"
     os.makedirs(reports_dir, exist_ok=True)
 
-    python_path = os.path.join("venv", "Scripts", "python.exe")
+    python_path = os.path.join("venv", "Scripts", "pythonw.exe")
     # python_path = "C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
     # Base command using the virtual environment's Python
     base_cmd = [python_path, "-m", "pytest", ui_tests_path]
