@@ -11,7 +11,7 @@ pipeline {
                 echo 'Setting up Python environment with Anaconda...'
                 bat '''
                 call ${ANACONDA_PATH}\\Scripts\\activate.bat
-                call conda create --name myenv python=3.8 -y
+                call conda create --name myenv python=3.9 -y
                 call conda activate myenv
                 call pip install -r requirements.txt
                 '''
