@@ -14,7 +14,7 @@ def run_pytest(parallel=False):
     python_path = os.path.join("venv", "Scripts", "python.exe")
     # python_path = "C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
     # Base command using the virtual environment's Python
-    base_cmd = ["venv/Scripts/python.exe", "-m", "pytest", ui_tests_path]  # cd  C:\\Users\\Moham\\Videos\\mondat_POC |
+    base_cmd = [python_path, "-m", "pytest", ui_tests_path]  # cd  C:\\Users\\Moham\\Videos\\mondat_POC |
 
     html_report = os.path.join(reports_dir, "report.html")
 
