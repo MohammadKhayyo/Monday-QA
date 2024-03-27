@@ -3,8 +3,6 @@ from infra.infra_api.api_wrapper import MondayApi
 from logic.logic_api.work_space import WorkSpace
 from logic.logic_api.board import Board
 from logic.logic_api.group import Group
-from logic.logic_api.item import Item
-from logic.logic_api.column import Column
 from Utils import generate_string
 from infra.infra_jira.jira_wrapper import JiraWrapper
 from Utils.error_handling import test_decorator

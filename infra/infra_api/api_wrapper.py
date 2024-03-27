@@ -3,8 +3,9 @@ from time import sleep
 import os
 import requests
 from dotenv import load_dotenv
+from Utils.configurations import ConfigurationManager
 
-load_dotenv()  # "../../configs/.env"
+load_dotenv()
 
 
 class MondayApi:
@@ -12,7 +13,9 @@ class MondayApi:
         api_key = os.getenv("API_MONDAY")
         self.token = api_key
         self.print_api_protocol = print_api_protocol
-        self.apiUrl = "https://api.monday.com/v2"
+        config_manager = ConfigurationManager()
+        self.settings = config_manager.load_settings("config_api.json")
+        self.apiUrl = self.settings["URL"]
         self.headers = {"Authorization": self.token}
 
     def send_request(self, query):
