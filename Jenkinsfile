@@ -1,12 +1,13 @@
 pipeline {
     agent any
+
     environment {
-        // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
         EMAIL = credentials('monday_email')
         PASSWORD = credentials('monday_password')
     }
+
     stages {
         stage('Setup Environment') {
             steps {
@@ -16,13 +17,14 @@ pipeline {
             }
             post {
                 success {
-                    slackSend (color: 'good', message: "SUCCESS: Setup Environment stage completed successfully.")
+                    slackSend (color: 'good', message: "SUCCESS: Setup Environment success.")
                 }
                 failure {
-                    slackSend (color: 'danger', message: "FAILURE: Setup Environment stage failed.")
+                    slackSend (color: 'danger', message: "FAILURE: Setup Environment failed.")
                 }
             }
         }
+
         stage('Setup Selenium Server HUB') {
             steps {
                 echo 'Setting up Selenium server HUB...'
@@ -31,13 +33,14 @@ pipeline {
             }
             post {
                 success {
-                    slackSend (color: 'good', message: "SUCCESS: Setup Selenium Server HUB stage completed successfully.")
+                    slackSend (color: 'good', message: "SUCCESS: Setup Selenium Server HUB success.")
                 }
                 failure {
-                    slackSend (color: 'danger', message: "FAILURE: Setup Selenium Server HUB stage failed.")
+                    slackSend (color: 'danger', message: "FAILURE: Setup Selenium Server HUB failed.")
                 }
             }
         }
+
         stage('Setup Selenium Server nodes') {
             steps {
                 echo 'Setting up Selenium server nodes...'
@@ -46,59 +49,66 @@ pipeline {
             }
             post {
                 success {
-                    slackSend (color: 'good', message: "SUCCESS: Setup Selenium Server nodes stage completed successfully.")
+                    slackSend (color: 'good', message: "SUCCESS: Setup Selenium Server nodes success.")
                 }
                 failure {
-                    slackSend (color: 'danger', message: "FAILURE: Setup Selenium Server nodes stage failed.")
+                    slackSend (color: 'danger', message: "FAILURE: Setup Selenium Server nodes failed.")
                 }
             }
         }
+
         stage('Running Tests') {
             steps {
                 echo 'Testing..'
-                bat '''
-                venv\\Scripts\\python.exe test_runner_ui_api_pytest.py
-                '''
+                bat "venv\\Scripts\\python.exe -m pytest Tests/demo/api_ui_test.py --html=reports/report.html"
             }
             post {
                 success {
-                    slackSend (color: 'good', message: "SUCCESS: Running Tests stage completed successfully.")
+                    slackSend (color: 'good', message: "SUCCESS: Running Tests success.")
                 }
                 failure {
-                    slackSend (color: 'danger', message: "FAILURE: Running Tests stage failed.")
+                    slackSend (color: 'danger', message: "FAILURE: Running Tests failed.")
                 }
             }
         }
+
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                // Your deployment steps here
             }
             post {
                 success {
-                    slackSend (color: 'good', message: "SUCCESS: Deploy stage completed successfully.")
+                    slackSend (color: 'good', message: "SUCCESS: Deploy success.")
                 }
                 failure {
-                    slackSend (color: 'danger', message: "FAILURE: Deploy stage failed.")
+                    slackSend (color: 'danger', message: "FAILURE: Deploy failed.")
                 }
             }
         }
-         stage('Publish Report') {
-             steps {
-                bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
+
+        stage('Check Reports Directory') {
+            steps {
+                bat 'dir reports'
+            }
+        }
+
+        stage('Publish Report') {
+            steps {
+                echo 'Deploying..'
+                bat 'powershell Compress-Archive -Path reports\\report.html -DestinationPath report.zip'
                 archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
+            }
+        }
     }
-}
-    }
+
     post {
         always {
             echo 'Cleaning up...'
-            // General cleanup notification
             slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {
             echo 'Build succeeded.'
-            slackSend (color: 'good', message: "SUCCESS: Build completed successfully.")
+            slackSend (color: 'good', message: "SUCCESS: Build success.")
         }
         failure {
             echo 'Build failed.'
