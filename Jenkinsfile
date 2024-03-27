@@ -54,7 +54,11 @@ pipeline {
         stage(' Running Tests') {
             steps {
                 echo 'Testing..'
-                bat """C:\\ProgramData\\Anaconda3\\pythonw.exe C:\\Users\\Moham\\Videos\\mondat_POC\\test_runner_ui_api.py"""
+                bat '''
+                cd .
+                C:\\ProgramData\\Anaconda3\\pythonw.exe C:\\Users\\Moham\\Videos\\mondat_POC\\test_runner_ui_api.py
+                bat 'ping 127.0.0.1 -n 111 > nul'
+                '''
             }
             post {
                 success {
