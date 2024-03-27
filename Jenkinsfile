@@ -9,6 +9,11 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment with Anaconda...'
+                            bat '''
+            call ${ANACONDA_PATH}\\Scripts\\activate.bat myenv
+            call conda deactivate
+            call conda env remove -n myenv -y
+            '''
                 bat '''
                 call ${ANACONDA_PATH}\\Scripts\\activate.bat
                 call conda create --name myenv python=3.9 -y
