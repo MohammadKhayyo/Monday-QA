@@ -7,7 +7,7 @@ def run_pytest(parallel=False):
     # Load configuration
     config = ConfigurationManager().load_settings()
 
-    ui_tests_path = "Tests/test_ui/End_to_End"
+    ui_tests_path = "Tests/test_demo"
     reports_dir = "reports"
     os.makedirs(reports_dir, exist_ok=True)
 

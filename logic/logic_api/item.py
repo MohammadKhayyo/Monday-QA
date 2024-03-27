@@ -124,3 +124,18 @@ class Item:
                     column['name'] = item_details['name']
                     return column
             return None
+
+    def returning_local_file_names(self, files_names):
+        local_file_names = list()
+        for i in range(0, len(files_names)):
+            local_file_names.append(files_names[i].split('/')[-1])
+        local_file_names.sort()
+        return local_file_names
+
+    def returning_file_names_from_the_website(self, files_names):
+        website_file_names = list()
+        files_names = files_names.split(',')
+        for i in range(0, len(files_names)):
+            website_file_names.append(files_names[i].split('/')[-1])
+        website_file_names.sort()
+        return website_file_names
