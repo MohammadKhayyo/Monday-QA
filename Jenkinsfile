@@ -51,11 +51,11 @@ pipeline {
                 }
             }
         }
-        stage(' Running Tests') {
+        stage('Running Tests') {
             steps {
                 echo 'Testing..'
                 bat '''
-                venv\\Scripts\\python.exe -m pytest Tests/demo
+                venv\\Scripts\\python.exe test_runner_ui_api_pytest.py
                 '''
             }
             post {
