@@ -54,7 +54,7 @@ pipeline {
         stage(' Running Tests') {
             steps {
                 echo 'Testing..'
-                bat "C:\\ProgramData\\Anaconda3\\pythonw.exe test_runner_ui_api_pytest.py"
+                bat "C:\\ProgramData\\Anaconda3\\pythonw.exe test_runner_ui_api.py"
             }
             post {
                 success {
