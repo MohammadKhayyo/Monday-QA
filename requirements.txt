@@ -6,3 +6,4 @@ python-dotenv~=1.0.1
 pathlib~=1.0.1
 pytest~=7.1.2
 parameterized~=0.9.0
+pytest-html
