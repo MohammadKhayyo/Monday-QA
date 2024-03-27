@@ -32,7 +32,7 @@ class BoardTest(unittest.TestCase):
                 print(f"Failed to create Jira issue: {e}")
 
     @test_decorator
-    def test_reach_error_429(self):
+    def test_reach_error_429(self):  # counter == 4
         unique_name = generate_string.create_secure_string()
         try:
             while True:
