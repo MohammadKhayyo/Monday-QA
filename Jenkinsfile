@@ -4,6 +4,8 @@ pipeline {
         // Environment variables setup
         API_MONDAY = credentials('token_monday')
         JIRA_TOKEN = credentials('token_jira')
+        EMAIL = credentials('monday_email')
+        PASSWORD = credentials('monday_password')
     }
     stages {
         stage('Setup Environment') {

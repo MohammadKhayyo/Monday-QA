@@ -1,12 +1,21 @@
 import requests
 import json
 from infra.infra_api.api_wrapper import MondayApi
+from Utils import generate_string
+from logic.logic_api.column import Column
+
+
+def upload_file_helper(board, group, data_column):
+    item_name = generate_string.create_secure_string()
+    Column(board=board, title=data_column['title'], description=data_column['description'],
+           column_type=data_column['column_type'])
+    item = Item(group=group, item_name=item_name, exist=False)
+    item.upload_files(column_title=data_column['title'], files_paths=data_column["files_paths"])
+    item_details = item.get_item_via_key(key='title', value=data_column['title'], id=item.item_id)
+    return item_details['text']
 
 
 class Item:
-    """
-        Represents an item of a group.
-    """
 
     def __init__(self, group, item_name=None, item_id=None, columns_values=[], exist=False):
         self.group = group

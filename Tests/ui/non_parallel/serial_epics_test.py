@@ -19,7 +19,7 @@ from Utils.error_handling import test_decorator
 @pytest.mark.serial
 @parameterized_class(('browser',), browser_types)
 class SerialEpicsTests(unittest.TestCase):
-    VALID_USERS = users.authentic_users
+    VALID_USERS = users.authentic_user
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
