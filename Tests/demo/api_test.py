@@ -38,7 +38,7 @@ class ItemTest(unittest.TestCase):
 
     @test_decorator
     def test_upload_one_file(self):
-        files_path = ["../../file1.txt"]  # , "../../file2.txt"
+        files_path = ["file1.txt"]  # , "../../file2.txt"
         data_column = {"title": "Attached Files", "column_type": "file", "description": "",
                        "files_paths": files_path}
         item_name = generate_string.create_secure_string()

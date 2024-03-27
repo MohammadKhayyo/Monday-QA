@@ -60,7 +60,7 @@ To execute the test suites:
 2. Run the test runner script:
 
 ```bash
-python test_ui/test_runner_api.py
+python ui/test_runner_api.py
 ```
 
 This will initiate the test execution based on the configurations defined in `config.json`. Tests can be run in parallel or serially, depending on your setup.

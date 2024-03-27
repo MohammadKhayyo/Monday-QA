@@ -4,7 +4,7 @@ from Utils.configurations import ConfigurationManager
 
 def run_pytest(parallel=False):
     # Directory where all tests are located
-    ui_tests_path = "Tests/test_ui/End_to_End"
+    ui_tests_path = "Tests/demo"
 
     # Basic command with the path to UI tests
     cmd = ["pytest", ui_tests_path, "--html=report.html"]
@@ -12,7 +12,7 @@ def run_pytest(parallel=False):
     # If parallel execution is enabled, modify the command to run with xdist
     if parallel:
         # Runs all tests except those marked as 'serial'
-        cmd.extend(["-n", "8", "-m", "not serial"])
+        cmd.extend(["-n", "3", "-m", "not serial"])
         subprocess.run(cmd)
 
         # Now run the serial tests without xdist

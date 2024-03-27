@@ -51,7 +51,7 @@ class AddBoardTests(unittest.TestCase):
 
     @test_decorator
     def test_add_file(self):
-        file_path = "../../file1.txt"
+        file_path = "file1.txt"
         data_column = {"title": "Attached Files", "column_type": "file", "description": "",
                        "files_paths": [file_path]}
         Column(board=self.board, title=data_column['title'], description=data_column['description'],

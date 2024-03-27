@@ -9,8 +9,8 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m venv venv'
-                bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
+//                 bat 'C:\\Users\\Moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m venv venv'
+//                 bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
             post {
                 success {
@@ -54,7 +54,7 @@ pipeline {
         stage(' Running Tests') {
             steps {
                 echo 'Testing..'
-                bat "venv\\Scripts\\python.exe test_runner_ui_api_pytest.py"
+                bat "C:\\ProgramData\\Anaconda3\\pythonw.exe test_runner_ui_api_pytest.py"
             }
             post {
                 success {

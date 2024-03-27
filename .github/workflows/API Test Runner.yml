@@ -26,4 +26,4 @@
 #
 #      - name: Run tests
 #        run: |
-#          python -m unittest Tests/test_api/test_runner.py
+#          python -m unittest Tests/api/test_runner.py

@@ -12,11 +12,11 @@ import sys
 # Now try importing ConfigurationManager
 
 from Utils.configurations import ConfigurationManager
-from Tests.test_api.work_space_test import WorkSpaceTest
-from Tests.test_api.board_test import BoardTest
-from Tests.test_api.group_test import GroupTest
-from Tests.test_api.column_test import ColumnTest
-from Tests.test_api.item_test import ItemTest
+from Tests.api.work_space_test import WorkSpaceTest
+from Tests.api.board_test import BoardTest
+from Tests.api.group_test import GroupTest
+from Tests.api.column_test import ColumnTest
+from Tests.api.item_test import ItemTest
 
 all_test_groups = [WorkSpaceTest, BoardTest, GroupTest, ColumnTest, ItemTest]
 
