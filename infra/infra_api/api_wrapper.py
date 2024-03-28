@@ -9,7 +9,7 @@ load_dotenv()
 
 
 class MondayApi:
-    def __init__(self, print_api_protocol=True):
+    def __init__(self, print_api_protocol=False):
         api_key = os.getenv("API_MONDAY")
         self.token = api_key
         self.print_api_protocol = print_api_protocol

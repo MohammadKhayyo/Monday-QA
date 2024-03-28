@@ -7,9 +7,17 @@ from logic.logic_api.group import Group
 from Utils import generate_string
 from infra.infra_jira.jira_wrapper import JiraWrapper
 from Utils.error_handling import test_decorator
+from parameterized import parameterized_class
+from Utils.configurations import ConfigurationManager
+from Utils.error_handling import test_decorator
+
+config_manager = ConfigurationManager()
+settings = config_manager.load_settings()
+browser_types = [('chrome',)]
 
 
 @pytest.mark.serial
+@parameterized_class(('chrome',), browser_types)
 class GroupTest(unittest.TestCase):
     def setUp(self):
         self.send_request = MondayApi()
