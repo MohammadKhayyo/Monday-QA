@@ -51,5 +51,6 @@ class ItemTest(unittest.TestCase):
         website_file_names = returning_file_names_from_the_website(website_files_details)
         local_file_names = returning_local_file_names(files_path)
         sleep(time_sleep)
+
         self.assertListEqual(local_file_names, website_file_names,
                              "The file names retrieved from the website do not match the file names uploaded from the local system.")

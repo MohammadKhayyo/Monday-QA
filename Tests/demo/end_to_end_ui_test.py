@@ -16,7 +16,7 @@ settings = config_manager.load_settings()
 import pytest
 from time import sleep
 
-time_sleep = 4
+time_sleep = 3
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 

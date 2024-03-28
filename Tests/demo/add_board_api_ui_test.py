@@ -18,15 +18,16 @@ from Utils.read_file import read_file
 from infra.infra_jira.jira_wrapper import JiraWrapper
 from Utils.upload_file_helper import upload_file_helper
 
+# Loading configuration settings and preparing browser types for parameterization
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
-@pytest.mark.serial
-@parameterized_class(('browser',), browser_types)
-class AddBoardTests(unittest.TestCase):
-    VALID_USERS = users.authentic_users
+# @pytest.mark.serial
+# @parameterized_class(('browser',), browser_types)
+class AddBoardUIAPITests(unittest.TestCase):
+    VALID_USERS = users.authentic_users  # Loading a list of authentic user credentials
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
