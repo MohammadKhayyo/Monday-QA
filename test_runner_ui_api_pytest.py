@@ -19,7 +19,7 @@ def run_pytest(parallel=False):
     html_report = os.path.join(reports_dir, "report.html")
 
     if parallel:
-        parallel_cmd = base_cmd + ["-n", "3", "-m", "not serial", f"--html={html_report}"]
+        parallel_cmd = base_cmd + ["-n", "5", "-m", "not serial", f"--html={html_report}"]
         try:
             subprocess.run(parallel_cmd, check=True)
         except subprocess.CalledProcessError as e:
