@@ -7,7 +7,7 @@ from Utils import generate_string
 from infra.infra_jira.jira_wrapper import JiraWrapper
 from Utils.error_handling import test_decorator
 from Utils.upload_file_helper import upload_file_helper, returning_local_file_names, \
-    returning_file_names_from_the_website
+    returning_file_names_from_the_website, get_item_details
 
 
 class ItemTest(unittest.TestCase):
@@ -17,10 +17,12 @@ class ItemTest(unittest.TestCase):
         self.board_name = generate_string.create_secure_string()
         self.folder_name = "My Team"
         self.group_name = generate_string.create_secure_string()
+        self.item_name = generate_string.create_secure_string()
         self.work_space = WorkSpace(work_space_name=self.work_space_name)
         self.board = Board(work_space=self.work_space, board_name=self.board_name, folder_name=self.folder_name,
                            exists=False)
         self.group = Group(board=self.board, group_name=self.group_name, exist=False)
+
         self.jira_client = JiraWrapper()
         self.test_failed = False
         self.error_msg = ""
@@ -39,8 +41,10 @@ class ItemTest(unittest.TestCase):
         data_column = {"title": "Attached Files", "column_type": "file", "description": "",
                        "files_paths": files_path}
 
-        website_files_details = upload_file_helper(self.board, self.group, data_column)
+        item = upload_file_helper(self.item_name, self.board, self.group, data_column)
+        website_files_details = get_item_details(item, data_column)
         website_file_names = returning_file_names_from_the_website(website_files_details)
         local_file_names = returning_local_file_names(files_path)
 
-        self.assertListEqual(local_file_names, website_file_names)
+        self.assertListEqual(local_file_names, website_file_names,
+                             "The file names retrieved from the website do not match the file names uploaded from the local system.")

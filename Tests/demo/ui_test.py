@@ -15,19 +15,13 @@ config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
 import pytest
 
-# browser_types = [(browser,) for browser in settings["browser_types"]]
-#
-#
-# @parameterized_class(('browser',), [
-#     ('chrome',),
-# ])
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
-# @pytest.mark.serial
-# @parameterized_class(('browser',), browser_types)
+@pytest.mark.serial
+@parameterized_class(('browser',), browser_types)
 class EndToEnd(unittest.TestCase):
-    VALID_USERS = users.authentic_user
+    VALID_USERS = users.authentic_users
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
@@ -68,7 +62,7 @@ class EndToEnd(unittest.TestCase):
         if self.test_failed:
             self.test_name = self.id().split('.')[-1]
             summary = f"{self.test_name} "
-            description = f"{self.error_msg} browser {self.browser}"
+            description = f"browser {self.browser}\n{self.error_msg} "
             try:
                 issue_key = self.jira_client.create_issue(summery=summary, description=description,
                                                           issue_type='Bug', project_key='KP')

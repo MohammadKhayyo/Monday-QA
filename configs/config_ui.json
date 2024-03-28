@@ -1,8 +1,8 @@
 {
   "hub": "http://localhost:4444",
   "url": "https://khayyomohammadaccount.monday.com",
-  "grid": false,
-  "parallel": false,
+  "grid": true,
+  "parallel": true,
   "serial": false,
   "demo": false,
   "browser": "chrome",

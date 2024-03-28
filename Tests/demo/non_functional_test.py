@@ -39,4 +39,5 @@ class BoardTest(unittest.TestCase):
                 board_id = create_board(self.work_space_id, unique_name)
                 delete_board(board_id)
         except Exception as e:
-            print(e)
+            self.assertEqual(str(e), "Too Many request",
+                             "Expected to encounter a 'Too Many Requests' error after repeatedly creating and deleting boards, but received a different error.")

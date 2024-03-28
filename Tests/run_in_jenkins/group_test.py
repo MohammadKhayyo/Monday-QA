@@ -42,8 +42,12 @@ class GroupTest(unittest.TestCase):
     def test_create_and_delete_group(self):
         title = generate_string.create_secure_string()
         group = Group(board=self.board, group_name=title, exist=False)
+
         delete_group_details = group.delete_group()
         delete_status = delete_group_details['delete_group']['deleted']
         group_details = group.check_group_via_key(key='title', value=title)
-        self.assertIsNone(group_details)
-        self.assertTrue(delete_status)
+
+        self.assertIsNone(group_details,
+                          "Expected the group to be non-existent after deletion, but found details indicating it still exists.")
+        self.assertTrue(delete_status,
+                        "Expected the group deletion to be reported as successful, but the API response indicated failure.")

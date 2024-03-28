@@ -19,7 +19,7 @@ from Utils.error_handling import test_decorator
 @pytest.mark.serial
 @parameterized_class(('browser',), browser_types)
 class SerialEpicsTests(unittest.TestCase):
-    VALID_USERS = users.authentic_user
+    VALID_USERS = users.authentic_users
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
@@ -38,13 +38,9 @@ class SerialEpicsTests(unittest.TestCase):
 
     @test_decorator
     def test_revert_bulk_epic_deletion(self):
-        try:
-            operationStatus = self.epics_Page.revertBulkDeletion()
-            self.assertTrue(operationStatus, "Reverting bulk deletion of epics failed")
-        except AssertionError as e:
-            self.test_failed = True
-            self.error_msg = str(e)
-            raise
+
+        operationStatus = self.epics_Page.revertBulkDeletion()
+        self.assertTrue(operationStatus, "Reverting bulk deletion of epics failed")
 
     def tearDown(self):
         self.home_page.sign_out()
@@ -53,7 +49,7 @@ class SerialEpicsTests(unittest.TestCase):
         if self.test_failed:
             self.test_name = self.id().split('.')[-1]
             summary = f"{self.test_name} "
-            description = f"{self.error_msg} browser {self.browser}"
+            description = f"browser {self.browser}\n{self.error_msg} "
             try:
                 issue_key = self.jira_client.create_issue(summery=summary, description=description,
                                                           issue_type='Bug', project_key='KP')

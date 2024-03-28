@@ -14,7 +14,7 @@ browser_types = [(browser,) for browser in settings["browser_types"]]
 
 @parameterized_class(('browser',), browser_types)
 class ParallelLoginTests(unittest.TestCase):
-    VALID_USERS = users.authentic_user
+    VALID_USERS = users.authentic_users
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()

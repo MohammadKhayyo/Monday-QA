@@ -3,12 +3,15 @@ from logic.logic_api.column import Column
 from logic.logic_api.item import Item
 
 
-def upload_file_helper(board, group, data_column):
-    item_name = generate_string.create_secure_string()
+def upload_file_helper(item_name, board, group, data_column):
     Column(board=board, title=data_column['title'], description=data_column['description'],
            column_type=data_column['column_type'])
     item = Item(group=group, item_name=item_name, exist=False)
     item.upload_files(column_title=data_column['title'], files_paths=data_column["files_paths"])
+    return item
+
+
+def get_item_details(item, data_column):
     item_details = item.get_item_via_key(key='title', value=data_column['title'], id=item.item_id)
     return item_details['text']
 

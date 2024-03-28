@@ -16,6 +16,7 @@ from Utils import generate_string
 from Utils.error_handling import test_decorator
 from Utils.read_file import read_file
 from infra.infra_jira.jira_wrapper import JiraWrapper
+from Utils.upload_file_helper import upload_file_helper
 
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
@@ -25,7 +26,7 @@ browser_types = [(browser,) for browser in settings["browser_types"]]
 @pytest.mark.serial
 @parameterized_class(('browser',), browser_types)
 class AddBoardTests(unittest.TestCase):
-    VALID_USERS = users.authentic_user
+    VALID_USERS = users.authentic_users
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
@@ -42,6 +43,7 @@ class AddBoardTests(unittest.TestCase):
         self.board_name = generate_string.create_secure_string()
         self.folder_name = "My Team"
         self.group_name = generate_string.create_secure_string()
+        self.item_name = generate_string.create_secure_string()
         self.work_space = WorkSpace(work_space_name=self.work_space_name)
         self.board = Board(work_space=self.work_space, board_name=self.board_name, folder_name=self.folder_name,
                            exists=False)
@@ -55,15 +57,13 @@ class AddBoardTests(unittest.TestCase):
         file_path = "file1.txt"
         data_column = {"title": "Attached Files", "column_type": "file", "description": "",
                        "files_paths": [file_path]}
-        Column(board=self.board, title=data_column['title'], description=data_column['description'],
-               column_type=data_column['column_type'])
-        item_name = generate_string.create_secure_string()
-        item = Item(group=self.group, item_name=item_name, exist=False)
-        item.upload_files(column_title=data_column['title'], files_paths=data_column["files_paths"])
+
+        item = upload_file_helper(self.item_name, self.board, self.group, data_column)
         self.home_page.switch_board(_name=self.board_name)
         text = self.home_page.click_Attached_Files(name_item=item.item_name)
         contents = read_file(file_path)
-        self.assertEqual(text, contents)
+
+        self.assertEqual(text, contents, "The contents of the uploaded file do not match the expected contents.")
 
     def tearDown(self):
         self.board.delete_board()

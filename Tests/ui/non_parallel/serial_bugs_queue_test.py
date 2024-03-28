@@ -18,7 +18,7 @@ browser_types = [(browser,) for browser in settings["browser_types"]]
 @pytest.mark.serial
 @parameterized_class(('browser',), browser_types)
 class BugsQueueTests(unittest.TestCase):
-    VALID_USERS = users.authentic_user
+    VALID_USERS = users.authentic_users
 
     def setUp(self):
         self.browser_wrapper = WebDriverManager()
@@ -37,13 +37,8 @@ class BugsQueueTests(unittest.TestCase):
 
     @test_decorator
     def test_revert_bulk_deletion_of_bugs(self):
-        try:
-            operationOutcome = self.bugs_queue_page.revertBulkBugDeletion()
-            self.assertTrue(operationOutcome, "Reverting bulk deletion of bugs failed")
-        except AssertionError as e:
-            self.test_failed = True
-            self.error_msg = str(e)
-            raise
+        operationOutcome = self.bugs_queue_page.revertBulkBugDeletion()
+        self.assertTrue(operationOutcome, "Reverting bulk deletion of bugs failed")
 
     def tearDown(self):
         self.home_page.sign_out()
@@ -53,7 +48,7 @@ class BugsQueueTests(unittest.TestCase):
         if self.test_failed:
             self.test_name = self.id().split('.')[-1]
             summary = f"{self.test_name} "
-            description = f"{self.error_msg} browser {self.browser}"
+            description = f"browser {self.browser}\n{self.error_msg}"
             try:
                 issue_key = self.jira_client.create_issue(summery=summary, description=description,
                                                           issue_type='Bug', project_key='KP')
