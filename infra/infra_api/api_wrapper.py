@@ -65,7 +65,6 @@ class MondayApi:
                             seconds_to_rest = 5
                     print("waiting for ", seconds_to_rest)
                     if until_status_code_429:
-                        print(response)
                         raise Exception("Too Many request")
                     sleep(seconds_to_rest)
                     return False
