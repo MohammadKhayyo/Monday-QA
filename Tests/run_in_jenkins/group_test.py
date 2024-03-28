@@ -1,4 +1,5 @@
 import unittest
+import pytest
 from infra.infra_api.api_wrapper import MondayApi
 from logic.logic_api.work_space import WorkSpace
 from logic.logic_api.board import Board
@@ -8,6 +9,7 @@ from infra.infra_jira.jira_wrapper import JiraWrapper
 from Utils.error_handling import test_decorator
 
 
+@pytest.mark.serial
 class GroupTest(unittest.TestCase):
     def setUp(self):
         self.send_request = MondayApi()
