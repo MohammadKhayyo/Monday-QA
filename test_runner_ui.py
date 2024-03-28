@@ -65,4 +65,3 @@ if __name__ == "__main__":
         run_tests_for_browser_serial(browsers, serial_test_groups)
     elif is_serial:
         run_tests_for_browser_serial(browsers, all_test_groups)
-    # run_tests_for_browser_serial(browsers, demo_test)
