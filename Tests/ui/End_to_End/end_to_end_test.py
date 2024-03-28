@@ -15,12 +15,6 @@ config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
 import pytest
 
-# browser_types = [(browser,) for browser in settings["browser_types"]]
-#
-#
-# @parameterized_class(('browser',), [
-#     ('chrome',),
-# ])
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 

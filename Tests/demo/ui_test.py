@@ -14,12 +14,14 @@ from Utils.error_handling import test_decorator
 config_manager = ConfigurationManager()
 settings = config_manager.load_settings()
 import pytest
+from time import sleep
 
+time_sleep = 4
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
-@pytest.mark.serial
-@parameterized_class(('browser',), browser_types)
+# @pytest.mark.serial
+# @parameterized_class(('browser',), browser_types)
 class EndToEnd(unittest.TestCase):
     VALID_USERS = users.authentic_users
 
@@ -40,14 +42,22 @@ class EndToEnd(unittest.TestCase):
 
     @test_decorator
     def test_create_and_remove_task(self):
+        sleep(time_sleep)
         unique_task_name = generate_string.create_secure_string()
+        sleep(time_sleep)
         creation_success = self.tasks_Interface.create_task(unique_task_name)
+        sleep(time_sleep)
         self.tasks_Interface.remove_task(task_name=unique_task_name)
+        sleep(time_sleep)
         self.tasks_Interface.click_undo_delete_button()
+        sleep(time_sleep)
         self.tasks_Interface.get_all_elements_in_task_in_search()
+        sleep(time_sleep)
         self.tasks_Interface.click_on_the_big_X()
         self.tasks_Interface.clear_search_the_small_x()
+        sleep(time_sleep)
         deletion_success = self.tasks_Interface.remove_task(task_name=unique_task_name)
+        sleep(time_sleep)
         list_all_elements_in_task_in_search = self.tasks_Interface.get_all_elements_in_task_in_search()
         operationResult = self.home_page.sign_out()
 
