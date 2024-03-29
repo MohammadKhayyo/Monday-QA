@@ -1,71 +1,67 @@
-# Selenium Testing Framework
+# UI & API Testing Suite for monday.com
 
-This repository contains a Python-based Selenium testing framework designed to automate and streamline browser-based testing for web applications. The framework utilizes the Selenium WebDriver for controlling browsers and executing test scenarios across different environments and platforms.
+This repository hosts a comprehensive testing suite designed to automate UI and API tests for the monday.com platform. Integrating Selenium Grid for UI testing and utilizing GraphQL queries for API validations, this suite ensures a thorough examination of both front-end and back-end components. Our CI/CD pipeline, constructed with Jenkins, Docker, and GitHub Actions, significantly enhances automation, testing efficiency, and overall software quality.
 
-## Project Structure
+## Key Features
 
-The project is organized into several key directories:
+- **Seamless Integration**: Effortlessly combines UI and API tests, offering a holistic approach to quality assurance for the monday.com platform.
+- **Advanced Testing Techniques**: Leverages Selenium Grid for distributed UI testing and GraphQL for efficient API testing, covering a wide range of scenarios and use cases.
+- **CI/CD Pipeline**: Employs Jenkins, Docker, and GitHub Actions to automate the testing lifecycle, from code pushes to deployment, facilitating continuous integration and delivery.
+- **Enhanced Efficiency**: Boosts automation, streamlines testing workflows, and significantly reduces manual testing efforts.
+- **Quality Assurance**: Elevates the standard of software quality through comprehensive testing strategies.
 
-- `infra/`: Contains the core infrastructure setup for the Selenium WebDriver, including configuration management and driver initialization.
-- `logic/`: Holds the business logic for page interactions, encapsulating the actions that can be performed on the web pages.
-- `Test/`: Contains all test cases, organized into `parallel` and `non_parallel` directories for tests that are intended to run in parallel or serially, respectively.
-- `Utils/`: Utility scripts supporting various functionalities such as string generation and user data management.
-
-### Key Components
-
-- **WebDriverManager (`infra/browser_wrapper.py`)**: Manages the initialization and configuration of the Selenium WebDriver instances.
-- **ConfigurationManager (`infra/configurations.py`)**: Loads and handles configuration settings from JSON files.
-- **Page Classes (`logic/*.py`)**: Define methods for interacting with web pages, encapsulating the Selenium commands.
-- **Test Classes (`Test/non_parallel/*.py` and `Test/parallel/*.py`)**: Test suites designed to validate the functionality of web applications using the framework.
-
-## Setup
+## Getting Started
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- Selenium WebDriver
-- Browser drivers (e.g., ChromeDriver for Google Chrome, geckodriver for Firefox) matching the installed browser versions
+- Docker
+- Jenkins with Pipeline, Docker, and GitHub plugins installed
+- Node.js and npm (for managing project dependencies)
+- Access to a monday.com account for API credentials
 
-### Installation
+### Installation and Setup
 
-1. Clone the repository to your local machine.
-2. Install the required Python packages:
+1. **Clone the Repository**
 
-```bash
-pip install -r requirements.txt
+```sh
+git clone https://github.com/yourrepository/monday-testing-suite.git
+cd monday-testing-suite
 ```
 
-3. Ensure browser drivers are installed and accessible in your system's PATH.
+2. **Configure Environment Variables**
 
-## Configuration
+Create a `.env` file at the root of your project directory, specifying your monday.com API credentials, among other necessary configurations:
 
-Edit the `config.json` file in the project root to specify your testing environment settings, such as browser types, WebDriver settings, and application URLs.
-
-Example `config.json` structure:
-
-```json
-{
-  "parallel": true,
-  "browser_types": ["chrome", "firefox"],
-  "hub": "http://localhost:4444/wd/hub",
-  "url": "https://your-application-url.com"
-}
+```
+MONDAY_API_KEY=your_monday_api_key
+JENKINS_URL=your_jenkins_url
+DOCKER_HUB_USERNAME=your_docker_hub_username
 ```
 
-## Running Tests
+3. **Running Docker Containers**
 
-To execute the test suites:
+Ensure Docker is running on your machine. Build and run the containers necessary for Selenium Grid and the application under test:
 
-1. Navigate to the project root directory.
-2. Run the test runner script:
-
-```bash
-python ui/test_runner_api.py
+```sh
+docker-compose up -d
 ```
 
-This will initiate the test execution based on the configurations defined in `config.json`. Tests can be run in parallel or serially, depending on your setup.
+4. **Setting Up Jenkins Pipeline**
+
+In Jenkins, create a new pipeline job, pointing it to your repository's `Jenkinsfile`. Configure the necessary credentials and environment variables in Jenkins to match those in your `.env` file.
+
+### Executing Tests
+
+Trigger the pipeline through a push to your repository or manually via Jenkins. The pipeline will automatically:
+
+- Set up the testing environment.
+- Execute UI and API tests against the monday.com platform.
+- Provide feedback and generate reports on test outcomes.
 
 ## Contributing
 
-Contributions to enhance the testing framework are welcome. Please follow the standard GitHub pull request process to propose your changes.
-# POC_MONDAY
+We welcome contributions that enhance the testing suite's capabilities or extend its coverage. Please fork the repository, create a feature branch, and submit a pull request with your changes. For detailed guidelines, refer to `CONTRIBUTING.md`.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
