@@ -24,7 +24,7 @@ This repository hosts a comprehensive testing suite designed to automate UI and 
 1. **Clone the Repository**
 
 ```sh
-git clone https://github.com/yourrepository/monday-testing-suite.git
+git clone https://github.com/MohammadKhayyo/Monday-final-project.git
 cd monday-testing-suite
 ```
 
