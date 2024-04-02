@@ -25,7 +25,7 @@ Embark on a seamless automation testing journey with our comprehensive suite des
 
 ### Prerequisites
 
-- Java & Python 3.6+
+- Java & Python 3.9+
 - Selenium WebDriver & requests library
 - pytest for running tests
 - Active Selenium Grid instance
