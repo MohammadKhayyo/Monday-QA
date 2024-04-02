@@ -55,7 +55,7 @@ pipeline {
         }
         stage('Running Tests') {
             steps {
-                echo 'Testing..'
+                echo 'Testing...'
                 bat '''
                 venv\\Scripts\\python.exe test_runner_pytest_jenkins.py
                 '''
@@ -71,7 +71,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying..'
+                echo 'Deploying...'
                 // Your deployment steps here
             }
             post {
@@ -83,17 +83,16 @@ pipeline {
                 }
             }
         }
-         stage('Publish Report') {
-             steps {
+        stage('Publish Report') {
+            steps {
                 bat 'powershell Compress-Archive -Path reports/* -DestinationPath report.zip -Force'
                 archiveArtifacts artifacts: 'report.zip', onlyIfSuccessful: true
-    }
-}
+            }
+        }
     }
     post {
         always {
             echo 'Cleaning up...'
-            // General cleanup notification
             slackSend (color: 'warning', message: "NOTIFICATION: Cleaning up resources...")
         }
         success {
