@@ -33,7 +33,7 @@ class ItemTest(unittest.TestCase):
         self.error_msg = ""
 
     def tearDown(self):
-        self.board.delete_board()
+        # self.board.delete_board()
         if self.test_failed:
             self.test_name = self.id().split('.')[-1]
             summary = f"{self.test_name}"

@@ -54,7 +54,7 @@ class AddBoardUIAPITests(unittest.TestCase):
         self.error_msg = ""
 
     @test_decorator
-    def test_add_file(self):
+    def test_upload_file(self):
         file_path = "file1.txt"
         data_column = {"title": "Attached Files", "column_type": "file", "description": "",
                        "files_paths": [file_path]}
