@@ -1,3 +1,5 @@
+import time
+from time import sleep
 import unittest
 import pytest
 from Utils import users
@@ -38,7 +40,7 @@ class AddBoardUIAPITests(unittest.TestCase):
         user = self.VALID_USERS[0]
         self.login_page.login(user['email'], user['password'])
         self.home_page = HomePage(self.driver)
-        self.home_page.changeEnvironment(environment_name="dev")
+        # self.home_page.changeEnvironment(environment_name="dev")
         self.send_request = MondayApi()
         self.work_space_name = "MY_TEAM"
         self.board_name = generate_string.create_secure_string()
@@ -52,14 +54,17 @@ class AddBoardUIAPITests(unittest.TestCase):
         self.jira_client = JiraWrapper()
         self.test_failed = False
         self.error_msg = ""
+        self.data_column = {"title": "Attached Files", "column_type": "file", "description": "",
+                            "files_paths": []}
 
     @test_decorator
     def test_upload_file(self):
+        # API
         file_path = "file1.txt"
-        data_column = {"title": "Attached Files", "column_type": "file", "description": "",
-                       "files_paths": [file_path]}
+        self.data_column["files_paths"].append(file_path)
+        item = upload_file_helper(self.item_name, self.board, self.group, self.data_column)
 
-        item = upload_file_helper(self.item_name, self.board, self.group, data_column)
+        # UI
         self.home_page.switch_board(_name=self.board_name)
         text = self.home_page.click_Attached_Files(name_item=item.item_name)
         contents = read_file(file_path)
