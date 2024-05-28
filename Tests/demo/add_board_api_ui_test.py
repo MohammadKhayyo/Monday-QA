@@ -24,8 +24,8 @@ settings = config_manager.load_settings()
 browser_types = [(browser,) for browser in settings["browser_types"]]
 
 
-# @pytest.mark.serial
-# @parameterized_class(('browser',), browser_types)
+@pytest.mark.serial
+@parameterized_class(('browser',), browser_types)
 class AddBoardUIAPITests(unittest.TestCase):
     VALID_USERS = users.authentic_users  # Loading a list of authentic user credentials
 
