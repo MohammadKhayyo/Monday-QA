@@ -4,7 +4,7 @@ from infra.infra_ui.page_base import BasePage
 
 class BugsQueuePage(BasePage):
     BUGS_QUEUE_ELEMENT = (By.XPATH,
-                          '/html/body/div[1]/div[4]/div[3]/div[1]/div/div/div/div[2]/div[2]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[6]/div/div/div/div/div')
+                          '/html/body/div[1]/div[4]/div[3]/div[1]/div/div/div/div[2]/div[3]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[6]/div/div/div/div/div')
     NEW_BUGS_QUEUE_ELEMENT = (By.XPATH, '//*[@id="board-header-view-bar"]/div/div[2]/div/div[1]/button')
     TEXT_NEW_BUGS_QUEUE = (By.XPATH,
                            "//*[starts-with(@id, 'row-pulse---') and contains(@id, '-notplaceholder-focus-name-')]/div/div[3]/div/div[2]/div/input")
