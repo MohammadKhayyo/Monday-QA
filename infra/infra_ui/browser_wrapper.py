@@ -21,6 +21,8 @@ class WebDriverManager:
         options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("window-size=3840,2400")
+        options.add_argument("force-device-scale-factor=2.5")
         return options
 
     def initialize_web_driver(self, browser_name):
@@ -55,6 +57,8 @@ class WebDriverManager:
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")  # This line is often necessary in CI environments
             options.add_argument("--disable-dev-shm-usage")  # This can help in environments with limited resources
+            options.add_argument("window-size=3840,2400")
+            options.add_argument("force-device-scale-factor=2.5")
             return options
         else:
             raise ValueError("Unsupported browser type")

@@ -34,13 +34,13 @@ class SerialEpicsTests(unittest.TestCase):
         self.home_page.changeEnvironment(environment_name="dev")
         self.jira_client = JiraWrapper()
         self.test_failed = False
-        self.error_msg = ""
+        self.error_msg = "Reverting bulk deletion of epics failed"
 
     @test_decorator
     def test_revert_bulk_epic_deletion(self):
 
         operationStatus = self.epics_Page.revertBulkDeletion()
-        self.assertTrue(operationStatus, "Reverting bulk deletion of epics failed")
+        self.assertTrue(operationStatus, self.error_msg)
 
     def tearDown(self):
         self.home_page.sign_out()
