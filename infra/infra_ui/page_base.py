@@ -34,7 +34,7 @@ class BasePage():
     X_SEARCH = (By.XPATH, '//*[@id="board-header-view-bar"]/div[1]/div[3]/div[1]/div/div[2]/span/button')
     ALL_CHECK_BOX_ = (By.XPATH,
                       "//*[starts-with(@id, 'row-header-currentBoard-') and contains(@id, '-notfloating-focus-name-')]/div[2]")
-    UNDO = (By.XPATH, '//*[@id="main"]/div[24]/div[1]/div/div[2]/button')
+    UNDO = (By.XPATH, '//*[@id="main"]/div[23]/div[1]/div/div[2]/button')
     switcher_button = (By.XPATH, '//*[@id="product-switcher-button-id"]')
     DELETE_ANYWAY_BUTTON_fire_fox = BTN_CONFIRM_DELETE
     TXT_DESCRIPTION = (By.XPATH, '//*[@id="board-header"]/div/div/div[1]/div/div[1]/div/div[2]/span/button')
