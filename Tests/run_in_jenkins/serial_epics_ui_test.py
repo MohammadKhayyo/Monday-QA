@@ -49,7 +49,7 @@ class SerialEpicsTests(unittest.TestCase):
         if self.test_failed:
             self.test_name = self.id().split('.')[-1]
             summary = f"{self.test_name} "
-            description = f"browser {self.browser}\n{self.error_msg} "
+            description = f"browser {self.browser}\n{"Reverting bulk deletion of epics failed"} "
             try:
                 issue_key = self.jira_client.create_issue(summery=summary, description=description,
                                                           issue_type='Bug', project_key='KP')
