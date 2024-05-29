@@ -36,7 +36,7 @@ class SerialEpicsTests(unittest.TestCase):
         self.test_failed = False
         self.error_msg = "Reverting bulk deletion of epics failed"
 
-    # @test_decorator
+    @test_decorator
     def test_revert_bulk_epic_deletion(self):
 
         operationStatus = self.epics_Page.revertBulkDeletion()
