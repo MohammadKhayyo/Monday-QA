@@ -36,7 +36,7 @@ class SerialEpicsTests(unittest.TestCase):
         self.test_failed = False
         self.error_msg = "Reverting bulk deletion of epics failed"
 
-    @test_decorator
+    # @test_decorator
     def test_revert_bulk_epic_deletion(self):
 
         operationStatus = self.epics_Page.revertBulkDeletion()
@@ -49,7 +49,7 @@ class SerialEpicsTests(unittest.TestCase):
         if self.test_failed:
             self.test_name = self.id().split('.')[-1]
             summary = f"{self.test_name} "
-            description = f"browser {self.browser}\n{"Reverting bulk deletion of epics failed"} "
+            description = f"browser {self.browser}\n{self.error_msg} "
             try:
                 issue_key = self.jira_client.create_issue(summery=summary, description=description,
                                                           issue_type='Bug', project_key='KP')

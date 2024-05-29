@@ -9,10 +9,12 @@ def test_decorator(test_func):
         except AssertionError as e:
             print(f"Assertion Error in {test_func.__name__}: {e}")
             args[0].test_failed = True
+            args[0].error_msg = str(e)
             raise
         except Exception as e:
             print(f"Unexpected Error in {test_func.__name__}: {e}")
             args[0].test_failed = True
+            args[0].error_msg = str(e)
             raise
 
     return wrapper
